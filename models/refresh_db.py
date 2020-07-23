@@ -27,7 +27,7 @@ cursor.execute("""
                 regist_date DATETIME DEFAULT CURRENT_TIMESTAMP,
                 text VARCHAR(3000),
                 q_id INT UNSIGNED,
-                FOREIGN KEY (id) REFERENCES question(id)
+                FOREIGN KEY (q_id) REFERENCES question(id)
                 );
                 """)
 

@@ -221,7 +221,7 @@ class MySQL:
 
         try:
             self._open()
-            stmt = "SELECT id, title, category, regist_date FROM question where title LIKE '%{}%' OR category LIKE '%{}%'".format(search_str, search_str)
+            stmt = "SELECT id, title, category, regist_date FROM question where title LIKE '%{}%' OR category LIKE '%{}%'".format(search_str)
             cursor = self.dbh.cursor()
             cursor.execute(stmt)
             questions = cursor.fetchall()
@@ -307,14 +307,20 @@ class MySQL:
     """
     引　数：質問ID(question_id)
     戻り値：削除が成功かどうか（boolean型）
-    機　能：指定したIDの質問を削除する
+    機　能：指定したIDの質問を削除する(自動的に回答も削除される)
     """
     def delete_question(self, question_id):
         self._open()
         
         try:
+            #質問の削除
             stmt = "DELETE FROM question WHERE id = {}".format(question_id)
             cursor = self.dbh.cursor()
+            cursor.execute(stmt)
+            #questions = cursor.fetchall()
+
+            #回答の削除
+            stmt = "DELETE FROM answer WHERE q_id = {}".format(question_id)
             cursor.execute(stmt)
             #questions = cursor.fetchall()
         
@@ -324,6 +330,212 @@ class MySQL:
         
         else:
             self.dbh.commit()
+            cursor.close()
+            self._close()
+
+            return True
+    
+    #-----------------
+    #2020/07/23追加機能
+    #-----------------
+
+    """
+    引　数：ユーザID(user_id)、ユーザパス(user_pass)
+    戻り値：ログインできたかどうか（boolean型）
+    機　能：ログインをする
+    """
+    def check_account(self, user_id, user_password):
+        login = [] 
+        self._open()
+        
+        try:
+            #ログイン
+            stmt = "SELECT user_id, user_pass FROM user WHERE user_id = '{}' AND user_pass = '{}'".format(user_id, user_password)
+            cursor = self.dbh.cursor()
+            cursor.execute(stmt)
+            login = cursor.fetchall()
+        
+        except mysql.connector.Error as err:
+            print(err)#テスト用
+            return False
+        
+        else:
+            self.dbh.commit()
+            cursor.close()
+            self._close()
+
+            if login:
+                return True
+            else:
+                return False
+
+    """
+    引　数：検索するカテゴリ(search_category)
+    戻り値：データ配列(質問ID・タイトル・カテゴリ・日付)
+    機　能：受け取ったカテゴリが含まれる質問を返す
+    """
+    def search_category(self, search_category):
+        questions=[]
+
+        try:
+            self._open()
+            stmt = "SELECT id, title, category, regist_date FROM question where category LIKE '%{}%'".format(search_category)
+            cursor = self.dbh.cursor()
+            cursor.execute(stmt)
+            questions = cursor.fetchall()
+        
+        except mysql.connector.Error as err:
+            print(err)#テスト用
+            return []
+        
+        else:
+            cursor.close()
+            self._close()
+
+            return questions
+
+    """
+    引　数：ID(user_id),パスワード(user_password),名前(user_name),性別(user_sex)
+    戻り値：Boolean型
+    機　能：ユーザの登録
+    """
+    def regist_user(self, user_id, user_password, user_name, user_sex):
+
+        try:
+            self._open()
+            stmt = "INSERT INTO user(user_id, user_password, user_name, user_sex) VALUES('{}', '{}', '{}', '{}')".format(user_id, user_password, user_name, user_sex)
+            cursor = self.dbh.cursor()
+            cursor.execute(stmt)
+        
+        except mysql.connector.Error as err:
+            print(err)#テスト用
+            return False
+        
+        else:
+            cursor.close()
+            self._close()
+
+            return True
+    
+    """
+    引　数：ID(user_id)
+    戻り値：配列(名前,性別,プロフィール)
+    機　能：ユーザの詳細データを渡す
+    """
+    def get_user_info(self, user_id):
+        user=[]
+
+        try:
+            self._open()
+            stmt = "SELECT user_name, user_sex, user_profile FROM user WHERE user_id = '{}'".format(user_id)
+            cursor = self.dbh.cursor()
+            cursor.execute(stmt)
+            user = cursor.fetchall()
+        
+        except mysql.connector.Error as err:
+            print(err)#テスト用
+            return []
+        
+        else:
+            cursor.close()
+            self._close()
+
+            return user
+    
+    
+    """
+    引　数：ID(user_id),名前(user_name)
+    戻り値：Boolean型
+    機　能：ユーザの名前の編集
+    """
+    def set_user_name(self, user_id, user_name):
+
+        try:
+            self._open()
+            stmt = "UPDATE user SET user_name = '{}' WHERE user_id = '{}'".format(user_name, user_id)
+            cursor = self.dbh.cursor()
+            cursor.execute(stmt)
+        
+        except mysql.connector.Error as err:
+            print(err)#テスト用
+            return False
+        
+        else:
+            cursor.close()
+            self._close()
+
+            return True
+
+    
+    """
+    引　数：ID(user_id),プロフィール(user_profile)
+    戻り値：Boolean型
+    機　能：ユーザのプロフィールの編集
+    """
+    def set_user_profile(self, user_id, user_profile):
+
+        try:
+            self._open()
+            stmt = "UPDATE user SET user_profile = '{}' WHERE user_id = '{}'".format(user_profile, user_id)
+            cursor = self.dbh.cursor()
+            cursor.execute(stmt)
+        
+        except mysql.connector.Error as err:
+            print(err)#テスト用
+            return False
+        
+        else:
+            cursor.close()
+            self._close()
+
+            return True
+    
+    """
+    引　数：ID(user_id)
+    戻り値：Boolean型
+    機　能：ユーザのIDがかぶっているかどうか
+    """
+    def check_id_already_exists(self, user_id, user_profile):
+        user = []
+
+        try:
+            self._open()
+            stmt = "SELECT user_id FROM user WHERE user_id = '{}'".format(user_id)
+            cursor = self.dbh.cursor()
+            cursor.execute(stmt)
+        
+        except mysql.connector.Error as err:
+            print(err)#テスト用
+            return True
+        
+        else:
+            cursor.close()
+            self._close()
+            
+            if user:
+                return True
+            else:
+                return False
+
+    """
+    引　数：
+    戻り値：
+    機　能：
+    """
+    def (self, user_id, user_profile):
+
+        try:
+            self._open()
+            stmt = "".format()
+            cursor = self.dbh.cursor()
+            cursor.execute(stmt)
+            questions = cursor.fetchall()
+        
+        except mysql.connector.Error as err:
+            print(err)#テスト用
+            return False
+        
+        else:
             cursor.close()
             self._close()
 
