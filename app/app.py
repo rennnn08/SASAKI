@@ -63,21 +63,35 @@ def search():
 @app.route("/question_detail/<int:question_id>",methods=["POST","GET"])
 def answer_regist(question_id):
     
-    answer2 = db.extract_answers(question_id)
-    answers = answer2[2]
+    #answer2 = db.extract_answers(question_id)
+    #answers = answer2[2]
     answer_list = db.extract_question(question_id)
-    create_title_id = answer_list[1]
-    create_category_id = answer_list[2]
-    create_detail_id = answer_list[4]
+    create_title_id = answer_list[0][1]
+    create_category_id = answer_list[0][2]
+    create_detail_id = answer_list[0][4]
+    
+    
     #tryは実行したい
     try:
-        answer_text = request.form["answer_text.xt"]
+        responce_answers = []
+        answer_text = request.form["answer_text"]
         db.regist_answer(question_id,answer_text)
-        ##expectは例外が起きたとき(実行できなかったとき)
+        answers = db.extract_answers(question_id)
+        answerslen = len(answers)
+        for ans in range(answerslen):
+            responce_answers.append(answers[ans][2])
     except:
-        print("Nosignal")
-    return render_template("question_detail.html",answers=answers,create_title_id=create_title_id,
-    create_category_id=create_category_id,create_detail_id=create_detail_id)    
+        try:
+            responce_answers = []
+            answers = db.extract_answers(question_id)
+            answerslen = len(answers)
+            for ans in range(answerslen):
+                responce_answers.append(answers[ans][2])
+        except:
+            print("notfindall")
+
+    return render_template("question_detail.html",answers=responce_answers,create_title_id=create_title_id,
+    create_category_id=create_category_id,create_detail_id=create_detail_id,question_id=question_id)    
 
 @app.route("/create_question")
 def create_question():
