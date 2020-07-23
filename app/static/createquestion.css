@@ -1,0 +1,43 @@
+.deeppage{
+    padding: 20px;
+    margin-bottom: 50px;
+}
+/*入力フォーム*/
+form{
+    /*中央寄せ*/
+    
+    width: 80%;
+    margin: 0 auto;
+    max-width: 800px;
+
+}
+
+.title_textbox{
+    /*サイズ定義*/
+    width:800px;
+    height:1.5em;
+}
+
+.category_textbox{
+    /*サイズ定義*/
+    width:800px;
+    height:1.5em;
+}
+
+.detail_textarea {
+    /*サイズ定義*/
+    white-space: pre-wrap;
+    width:  800px;
+    height: 500px;
+    resize:none;
+}
+
+.Common_button2{
+    /*右寄せ*/
+    float: right;
+}
+
+body {
+    margin: 0;
+    padding: 0;
+}

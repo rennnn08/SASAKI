@@ -1,0 +1,28 @@
+<!DOCTYPE html>
+<html name="home_page">
+    <head>
+        <title>質問作成</title>
+        <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.0/css/bootstrap.min.css" integrity="sha384-9aIt2nRpC12Uk9gS9baDl411NQApFmC26EwAOH8WgZl5MYYxFfc+NcPb1dKGj7Sk" crossorigin="anonymous">
+        <link rel="stylesheet" type="text/css" href="{{ staticfile('createquestion.css') }}">
+        <link rel="stylesheet" type="text/css" href="{{ staticfile('header.css') }}">
+    </head>
+    <body>
+        {% include "header.html" %}
+        <div class="deeppage">
+            <a href="..">ホームページ</a>
+            <a>>>質問作成ページ</a>
+        </div>
+
+        <form action="/" method="post">
+            <input type="submit" value="送信" name="send_question_button1"class="Common_button">
+            <p>タイトル</p>
+            <p><input type="text" maxlength="30"name="create_title_id" class="title_textbox"></p>
+            <p>カテゴリー</p>
+            <p><input type="text"id="category_textbox" name="create_category_id" class="category_textbox"></p>
+            <p>本文</p>
+            <p><textarea name="create_detail_id" maxlength="3000"class = "detail_textarea"></textarea></p>
+            <div class="Common_button2"><input type="submit" value="送信" name="send_question_button2"class="Common_button"></div>
+        </form>
+
+    </body>
+</html>

@@ -1,0 +1,32 @@
+.deeppage{
+    margin-top:120px;
+}
+
+form{
+    /*中央寄せ*/
+    width: 80%;
+    margin: 0 auto;
+    max-width: 800px;
+}
+.Common_label{
+    /*左詰め+上詰めとボーダー*/
+    white-space:pre-wrap;
+    text-align:left;
+    vertical-align:top;
+    width:800px;
+    border : solid 1px #333 ; 
+    background-color:#fff;
+}
+
+body {
+    margin: 0;
+    padding: 0;
+}
+
+.detail_textarea {
+    /*サイズ定義*/
+    white-space: pre-wrap;
+    width:  800px;
+    height: 500px;
+    resize:none;
+}

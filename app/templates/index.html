@@ -1,0 +1,44 @@
+<!DOCTYPE html>
+<html lang="ja">
+    <head>
+        <meta charset="UTF-8">
+        <title>質問投稿サイト</title>
+        <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.0/css/bootstrap.min.css" integrity="sha384-9aIt2nRpC12Uk9gS9baDl411NQApFmC26EwAOH8WgZl5MYYxFfc+NcPb1dKGj7Sk" crossorigin="anonymous">
+        <link rel="stylesheet" type="text/css" href="{{ staticfile('style.css') }}">
+        <link rel="stylesheet" type="text/css" href="{{ staticfile('header.css') }}">
+    </head>
+    <body>
+        {% include "header.html" %}
+        <div class="main">
+            <form method="post" action="/search">
+                <input type="text" name="search_word" class="input-text" placeholder="検索">
+                <input type="submit" class="input-button btn btn-info" value="検索">
+            </form>
+
+            <a href="{{ url_for('create_question') }}" role="button" class="btn btn-info m-3">質問作成</a>
+
+            {{ pagination.info}}
+            <div class="d-flex justify-content-center m-2">{{ pagination.links}}</div>
+            <table class="m-auto p-5 w-75">
+                <thread class="m-auto p-5">
+                    <th>#</th>
+                    <th>Catagory</th>
+                    <th>Title</th>
+                    <th>Date</th>
+                </thread>
+                <tbody class="m-auto">
+                    {% for question in all_question %}
+                        <tr class="border-bottom">
+                            <td><a href="{{url_for('answer_regist',question_id=question[0])}}">{{ loop.index + pagination.skip }}</a></td>
+                            <td>{{question[2]}}</td>
+                            <td>{{question[1]}}</td>
+                            <td>{{question[3]}}</td>
+                        </tr>
+                    {% endfor %}
+                </tbody>
+            </table>
+            <div class="d-flex justify-content-center m-3">{{ pagination.links }}</div>
+
+        </div>
+    </body>
+</html>
