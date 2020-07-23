@@ -446,7 +446,7 @@ class MySQL:
     """
     引　数：ID(user_id),名前(user_name)
     戻り値：Boolean型
-    機　能：ユーザの名前の編集
+    機　能：ユーザの名前の変更
     """
     def set_user_name(self, user_id, user_name):
 
@@ -470,7 +470,7 @@ class MySQL:
     """
     引　数：ID(user_id),プロフィール(user_profile)
     戻り値：Boolean型
-    機　能：ユーザのプロフィールの編集
+    機　能：ユーザのプロフィールの変更
     """
     def set_user_profile(self, user_id, user_profile):
 
@@ -516,27 +516,3 @@ class MySQL:
                 return True
             else:
                 return False
-
-    """
-    引　数：
-    戻り値：
-    機　能：
-    """
-    def (self, user_id, user_profile):
-
-        try:
-            self._open()
-            stmt = "".format()
-            cursor = self.dbh.cursor()
-            cursor.execute(stmt)
-            questions = cursor.fetchall()
-        
-        except mysql.connector.Error as err:
-            print(err)#テスト用
-            return False
-        
-        else:
-            cursor.close()
-            self._close()
-
-            return True
