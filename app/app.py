@@ -79,6 +79,22 @@ def answer_regist(question_id):
     return render_template("question_detail.html",answers=answers,create_title_id=create_title_id,
     create_category_id=create_category_id,create_detail_id=create_detail_id)    
 
+@app.route("/my_page")
+def my_page():
+
+    search = False
+    q = request.args.get('q')
+    if q:
+        search = True
+
+    page = request.args.get(get_page_parameter(), type=int, default=1)
+    #all_question = QuestionContent.query.all()
+    all_questions = db.extract_all_questions()
+    all_question = all_questions[(page - 1)*20: page*20]
+    pagiantion = Pagination(page=page, total=len(all_questions), search=search, per_page=20, record_name='all_question', css_framework='bootstrap4')
+
+    return render_template("my_page.html",pagination=pagiantion,all_questions=all_questions) 
+
 @app.route("/create_question")
 def create_question():
     
