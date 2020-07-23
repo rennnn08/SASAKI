@@ -1,70 +1,66 @@
 <!DOCTYPE html>
 <html>
-    <header>
-        <h1>
-          <a href='/'>質問投稿サイト</a>
-        </h1>
-        <nav class="nav">
-        <ul>
-            <li><a href='/'>ホーム</a></li>
-        </ul>
-     </nav>
-  </header>
-    {% include "header.html" %}
+    <head>
+        <meta charset="UTF-8">
+        <title>質問投稿サイト</title>
+        <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.0/css/bootstrap.min.css" integrity="sha384-9aIt2nRpC12Uk9gS9baDl411NQApFmC26EwAOH8WgZl5MYYxFfc+NcPb1dKGj7Sk" crossorigin="anonymous">
+        <link rel="stylesheet" type="text/css" href="{{ staticfile('questiondetail.css') }}">
+        <link rel="stylesheet" type="text/css" href="{{ staticfile('header.css') }}">
+    </head>
+    
     <body>
-    <p>
-    <div class="deeppage">
-    <a href="..">ホームページ</a>
-    <a>>>質問概要</a>
-    </div>
+        {% include "header.html" %}
+        <p>
+        <div class="deeppage">
+            <a href="..">ホームページ</a>
+            <a>>>質問概要</a>
+        </div>
 
-    <form>
-        <!--質問の概要-->
-        <table>
+        <form>
+            <!--質問の概要-->
+            <table>
             
-            <tr><th name="create_title_id" class="Common_label" height="1em">{{create_title_id}}</th></tr>
+                <tr><th name="create_title_id" class="Common_label" height="1em">{{create_title_id}}</th></tr>
             
-            <tr><th name="create_category_id" class="Common_label">{{create_category_id}}</th></tr>
+                <tr><th name="create_category_id" class="Common_label">{{create_category_id}}</th></tr>
             
-            <tr><th name="create_detail_id"  class = "Common_label" height="500">{{create_detail_id}}</th></tr>
-        </table>
-        <input type="button" value="回答欄表示" onclick="clickBtn1()" />
-    </form>
-    <div id="my_answer">
-        <form action="/question_detail" method="POST">
-            <p><textarea name="answer_text" maxlength="3000" class = "detail_textarea"></textarea></p>
-            <input type="submit" value="回答の送信" class="Common_button">
+                <tr><th name="create_detail_id"  class = "Common_label" height="500">{{create_detail_id}}</th></tr>
+            </table>
+            <input type="button" value="回答欄表示" onclick="clickBtn1()" />
         </form>
-    </div>
-    <p>この質問への回答</p>
+        <div id="my_answer">
+            <form action="/question_detail" method="POST">
+                <p><textarea name="answer_text" maxlength="3000" class = "detail_textarea"></textarea></p>
+                <input type="submit" value="回答の送信" class="Common_button">
+            </form>
+        </div>
+        <p>この質問への回答</p>
     
 
-    <form>
-        {% for kaitou in answers %}
-            <table>
-                <tr><th class="Common_label" >{{kaitou}}</th></tr>
-            </table>
-        {% endfor%}
-    </form>
+        <form>
+            {% for kaitou in answers %}
+                <table>
+                    <tr><th class="Common_label" >{{kaitou}}</th></tr>
+                </table>
+            {% endfor%}
+        </form>
 
-    <script type="text/javascript">
-       //初期表示は非表示
-    document.getElementById("my_answer").style.display ="none";
+        <script type="text/javascript">
+            //初期表示は非表示
+            document.getElementById("my_answer").style.display ="none";
 
-        function clickBtn1(){
-            const my_answer = document.getElementById("my_answer");
+            function clickBtn1(){
+                const my_answer = document.getElementById("my_answer");
 
-            if(my_answer.style.display=="block"){
-                // noneで非表示
-                my_answer.style.display ="none";
-            }else{
-                // blockで表示
-                my_answer.style.display ="block";
+                if(my_answer.style.display=="block"){
+                    // noneで非表示
+                    my_answer.style.display ="none";
+                }else{
+                    // blockで表示
+                    my_answer.style.display ="block";
+                }
             }
-        }
         </script>
 
-</body>
+    </body>
 </html>
-
-<!DOCTYPE html>
