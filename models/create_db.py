@@ -40,7 +40,7 @@ cursor.execute("""
                 user_id          VARCHAR(30)           PRIMARY KEY,
                 user_password    VARCHAR(30),
                 user_name        VARCHAR(30),
-                profile          VARCHAR(3000)
+                profile          VARCHAR(3000),
                 sex              CHAR(1)
                 );
                 """)
