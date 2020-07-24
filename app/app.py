@@ -24,8 +24,18 @@ def index():
     pagiantion = Pagination(page=page, total=len(all_questions), search=search, per_page=20, record_name='all_question', css_framework='bootstrap4')
     return render_template("index.html", all_question=all_question,pagination=pagiantion)
 
+@app.route("/create_account")
+def create_account():
+    
+    return render_template("create_account.html")
+
 @app.route("/", methods=["post"])
 def get():
+    #create_account_name = request.form["create_account_name"]
+    #create_account_id = request.form["create_account_id"]
+    #password = request.form["password"]
+
+    db.regist_question(create_title_id,create_category_id,create_detail_id)
     create_title_id = request.form["create_title_id"]
     create_category_id = request.form["create_category_id"]
     create_detail_id = request.form["create_detail_id"]

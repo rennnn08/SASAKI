@@ -1,0 +1,51 @@
+<!DOCTYPE html>
+<html name="home_page">
+    <head>
+        <title>アカウント作成</title>
+        <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.0/css/bootstrap.min.css" integrity="sha384-9aIt2nRpC12Uk9gS9baDl411NQApFmC26EwAOH8WgZl5MYYxFfc+NcPb1dKGj7Sk" crossorigin="anonymous">
+        <link rel="stylesheet" type="text/css" href="{{ staticfile('createaccount.css') }}">
+        <link rel="stylesheet" type="text/css" href="{{ staticfile('header.css') }}">
+    </head>
+    <body>
+      {% include "header.html" %}
+      <div class="deeppage">
+          <a">ログインページ</a>
+          <a>>>アカウント作成</a>
+      </div>
+      
+      <form action="/" method="post">
+          <div id="errorMessage"></div>
+          <label for="create_account_name">お名前:</label>
+          <input type= "text" maxlength="10" name="create_account_name"  class="name_textbox" required><br>
+
+          <label for="create_account_id">id:</label>
+          <input type="text"  name="create_account_id" class="id_text" required>
+
+          <label for="password">パスワード:</label>
+          <input type="password" name="password" required><br>
+
+          <label for="passwordConfirm">パスワード（確認）:</label>
+          <input type="password" name="passwordConfirm"  required><br>
+          
+          <input type="submit" value="送信" name="send_question_button2"class="Common_button">
+
+      </form>
+      
+      <script>
+          var form = document.forms[0];
+          form.onsubmit = function() {
+            // エラーメッセージをクリアする
+            form.password.setCustomValidity("");
+            // パスワードの一致確認
+            if (form.password.value != form.passwordConfirm.value) {
+              // 一致していなかったら、エラーメッセージを表示する
+              form.password.setCustomValidity("パスワードと確認用パスワードが一致しません");
+            }
+          };
+          // 入力値チェックエラーが発生したときの処理
+          form.addEventListener("invalid", function() {
+            document.getElementById("errorMessage").innerHTML = "入力値にエラーがあります";
+          }, false);
+        </script>
+    </body>
+</html>
