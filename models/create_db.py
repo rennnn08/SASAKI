@@ -17,45 +17,45 @@ cursor.execute("USE test_db")
 
 cursor.execute("""
                 CREATE TABLE IF NOT EXISTS question(
-                id          INT          UNSIGNED AUTO_INCREMENT PRIMARY KEY,
-                title       VARCHAR(30),
-                category    VARCHAR(30),
-                regist_date DATETIME     DEFAULT CURRENT_TIMESTAMP,
-                text        VARCHAR(3000)
+                id          INT UNSIGNED  AUTO_INCREMENT PRIMARY KEY,
+                title       VARCHAR(30)   NOT NULL,
+                category    VARCHAR(30)   NOT NULL,
+                regist_date DATETIME      NOT NULL DEFAULT CURRENT_TIMESTAMP,
+                text        VARCHAR(3000) NOT NULL
                 );
                 """)
 
 cursor.execute("""
                 CREATE TABLE IF NOT EXISTS answer(
-                id          INT           UNSIGNED AUTO_INCREMENT PRIMARY KEY,
-                regist_date DATETIME      DEFAULT CURRENT_TIMESTAMP,
-                text        VARCHAR(3000),
-                q_id        INT           UNSIGNED,
+                id          INT UNSIGNED  AUTO_INCREMENT PRIMARY KEY,
+                regist_date DATETIME      NOT NULL DEFAULT CURRENT_TIMESTAMP,
+                text        VARCHAR(3000) NOT NULL,
+                q_id        INT UNSIGNED  NOT NULL,
                 FOREIGN KEY (q_id) REFERENCES question(id)
                 );
                 """)
 
 cursor.execute("""
                 CREATE TABLE IF NOT EXISTS user(
-                user_id          VARCHAR(30)           PRIMARY KEY,
-                user_password    VARCHAR(30),
-                user_name        VARCHAR(30),
-                profile          VARCHAR(3000),
-                sex              CHAR(1)
+                user_id       VARCHAR(30)   PRIMARY KEY,
+                user_password VARCHAR(30)   NOT NULL,
+                user_name     VARCHAR(30)   NOT NULL,
+                profile       VARCHAR(3000),
+                sex           CHAR(1) NOT NULL
                 );
                 """)
 
 cursor.execute("""
                 CREATE TABLE IF NOT EXISTS user_question(
-                user_id          VARCHAR(30)           REFERENCES user(user_id),
-                q_id             INT                   REFERENCES question(id)
+                user_id VARCHAR(30) REFERENCES user(user_id),
+                q_id    INT         REFERENCES question(id)
                 );
                 """)
 
 cursor.execute("""
                 CREATE TABLE IF NOT EXISTS user_answer(
-                user_id          VARCHAR(30)           REFERENCES user(user_id),
-                a_id             INT                   REFERENCES answer(id)
+                user_id VARCHAR(30) REFERENCES user(user_id),
+                a_id    INT         REFERENCES answer(id)
                 );
                 """)
 
