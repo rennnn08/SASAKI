@@ -8,72 +8,59 @@
         <link rel="stylesheet" type="text/css" href="{{ staticfile('header.css') }}">
     </head>
 
-
-    <header>
-        <h1>
-          <a href='/'>質問投稿サイト</a>
-        </h1>
-        <nav class="nav">
-        <ul>
-            <li><a href='/'>ホーム</a></li>
-        </ul>
-     </nav>
-  </header>
-    {% include "header.html" %}
     <body>
-    <p>
-    <div class="deeppage">
-    <a href="..">ホームページ</a>
-    <a>>>質問概要</a>
-    </div>
-
-    <form>
-        <!--質問の概要-->
-        <table>
-            
-            <tr><th name="create_title_id" class="Common_label" height="1em">{{create_title_id}}</th></tr>
-            
-            <tr><th name="create_category_id" class="Common_label">{{create_category_id}}</th></tr>
-            
-            <tr><th name="create_detail_id"  class = "Common_label" height="500">{{create_detail_id}}</th></tr>
-        </table>
-        <input type="button" value="回答欄表示" onclick="clickBtn1()" />
-    </form>
-    <div id="my_answer">
-        <form action="/question_detail/{{question_id}}" method="POST">
-            <p><textarea name="answer_text" maxlength="3000" class = "detail_textarea"></textarea></p>
-            <input type="submit" value="回答の送信" class="Common_button">
-        </form>
-    </div>
-    <p>この質問への回答</p>
+        {% include "header.html" %}
     
+        <div class="container">
+            <div class="deeppage">
+                <a href="..">ホームページ</a>
+                <a>>>質問概要</a>
+            </div>
 
-    <form>
-        {% for kaitou in answers %}
-            <table>
-                <tr><th class="Common_label" >{{kaitou}}</th></tr>
-            </table>
-        {% endfor%}
-    </form>
+            <form>
+                <!--質問の概要-->
+                <table>
+                    <tr><th name="create_title_id" class="Common_label" height="1em">{{create_title_id}}</th></tr>
+            
+                    <tr><th name="create_category_id" class="Common_label">{{create_category_id}}</th></tr>
+            
+                    <tr><th name="create_detail_id"  class = "Common_label" height="500">{{create_detail_id}}</th></tr>
+                </table>
+                <input type="button" value="回答欄表示" onclick="clickBtn1()" class="btn btn-info">
 
-    <script type="text/javascript">
-       //初期表示は非表示
-    document.getElementById("my_answer").style.display ="none";
+            </form>
+            <div id="my_answer">
+                <form action="/question_detail/{{question_id}}" method="POST">
+                    <p><textarea name="answer_text" maxlength="3000" class = "detail_textarea"></textarea></p>
+                    <input type="submit" value="回答の送信" class="Common_button btn btn-info">
+                </form>
+            </div>
+            <p>この質問への回答</p>
+    
+            <form>
+                {% for kaitou in answers %}
+                    <table>
+                        <tr><th class="Common_label" >{{kaitou}}</th></tr>
+                    </table>
+                {% endfor%}
+            </form>
 
-        function clickBtn1(){
-            const my_answer = document.getElementById("my_answer");
+            <script type="text/javascript">
+                //初期表示は非表示
+                document.getElementById("my_answer").style.display ="none";
 
-            if(my_answer.style.display=="block"){
-                // noneで非表示
-                my_answer.style.display ="none";
-            }else{
-                // blockで表示
-                my_answer.style.display ="block";
-            }
-        }
-        </script>
+                function clickBtn1(){
+                    const my_answer = document.getElementById("my_answer");
 
-</body>
+                    if(my_answer.style.display=="block"){
+                        // noneで非表示
+                        my_answer.style.display ="none";
+                    }else{
+                        // blockで表示
+                        my_answer.style.display ="block";
+                    }
+                }
+            </script>
+        </div>
+    </body>
 </html>
-
-<!DOCTYPE html>

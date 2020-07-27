@@ -98,6 +98,45 @@ def create_question():
     
     return render_template("create_question.html")
 
+@app.route("/my_page")
+def my_page():
+
+    user_name="山本蓮"
+
+    search = False
+    q = request.args.get('q')
+    if q:
+        search = True
+
+    page = request.args.get(get_page_parameter(), type=int, default=1)
+    #all_question = QuestionContent.query.all()
+    all_questions = db.extract_all_questions()
+    all_question = all_questions[(page - 1)*20: page*20]
+    pagiantion = Pagination(page=page, total=len(all_questions), search=search, per_page=20, record_name='all_question', css_framework='bootstrap4')
+
+    return render_template("my_page.html",pagination=pagiantion,all_question=all_question,user_name=user_name)
+
+@app.route("/get_user_name", methods=["POST"])
+def get_user_info():
+    page = request.args.get(get_page_parameter(), type=int, default=1)
+    #all_question = QuestionContent.query.all()
+    all_questions = db.extract_all_questions()
+    all_question = all_questions[(page - 1)*20: page*20]
+    pagiantion = Pagination(page=page, total=len(all_questions), search=search, per_page=20, record_name='all_question', css_framework='bootstrap4')
+
+    user_name = request.form["username"]
+    return render_template("my_page.html",pagination=pagiantion,all_question=all_question,user_name=user_name)
+
+@app.route("/get_user_profile", methods=["POST"])
+def get_user_profile():
+    page = request.args.get(get_page_parameter(), type=int, default=1)
+    all_questions = db.extract_all_questions()
+    all_question = all_questions[(page - 1)*20: page*20]
+    pagiantion = Pagination(page=page, total=len(all_questions), search=search, per_page=20, record_name='all_question', css_framework='bootstrap4')
+
+    prof = request.form["prof"]
+    return render_template("my_page.html",pagination=pagiantion,all_question=all_question,prof=prof)
+
 if __name__ == "__main__":
     app.run(debug=True)
 
@@ -108,4 +147,3 @@ def add_staticfile():
         mtime =  str(int(os.stat(path).st_mtime))
         return '/static/' + fname + '?v=' + str(mtime)
     return dict(staticfile=staticfile_cp)
-
