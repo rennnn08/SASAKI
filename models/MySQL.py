@@ -266,22 +266,26 @@ class MySQL:
             cursor = self.dbh.cursor()
             
             #IDの検索
-            stmt = "SELECT id, q_id FROM answer WHERE q_id = {}".format(question_id)
+            stmt = "SELECT id FROM answer WHERE q_id = {}".format(question_id)
             cursor.execute(stmt)
-            id_data = cursor.fetchall()
+            a_id = cursor.fetchall()
 
+            if id_data:
+                #user_answerで一致する回答IDの削除
+                stmt = "DELETE FROM user_answer WHERE a_id = {}".format()
+                cursor.execute(stmt)
+                
+                #回答の削除
+                stmt = "DELETE FROM answer WHERE q_id = {}".format(question_id)
+                cursor.execute(stmt)
+            
             #user_questionで一致する質問IDの削除
-
-
-            #回答の削除
-            stmt = "DELETE FROM answer WHERE q_id = {}".format(question_id)
+            stmt = "DELETE FROM user_question WHERE q_id = {}".format(question_id)
             cursor.execute(stmt)
 
             #質問の削除
             stmt = "DELETE FROM question WHERE id = {}".format(question_id)
             cursor.execute(stmt)
-
-            stmt = "DELETE FROM user_question WHERE q_id = "
         
         except mysql.connector.Error as err:
             print(err)#テスト用
