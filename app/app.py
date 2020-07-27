@@ -1,4 +1,4 @@
-from flask import Flask,render_template,request
+from flask import Flask,render_template,request, redirect,session
 from models.models import QuestionContent
 from models.database import db_session
 from datetime import datetime
@@ -6,11 +6,42 @@ import os
 from flask_paginate import Pagination, get_page_parameter
 from models.MySQL import MySQL
 
-app = Flask(__name__)
-db = MySQL()
 
+app = Flask(__name__)
+app.secret_key = "aaa"
+db = MySQL()
 @app.route("/")
-@app.route("/index")
+@app.route("/",methods=["get"])
+def login():
+    #最初に来た時に表示
+    Labeltext = ""
+    return render_template("login.html",Labeltext=Labeltext)
+
+@app.route("/",methods=["POST"])
+def login_post():
+    #ログインフラグによって返すページを返る処理
+    
+    try:
+        LoginId = request.form["LoginId"]
+        LoginPass = request.form["LoginPass"]
+        idarukana = 10
+        if idarukana == 10:
+            session["flag"] = True
+            session["UserId"] = LoginId
+            return redirect("/home")
+        else:
+            Labeltext = ":IDまたはPASSが違います"
+            return render_template("login.html",Labeltext=Labeltext)
+            #IDとPASSを読み込んでデータべースへ問い合わせ
+            #IDが存在しPASSがあっている場合マイページ?へ
+            #ない場合IDまたはPASSが違いますと表示ラベル？に表示
+    except:
+        #上記以外の場合
+        Labeltext = ":ログインできません"
+        return render_template("login.html",Labeltext=Labeltext)
+    
+
+@app.route("/home")
 def index():
     search = False
     q = request.args.get('q')
@@ -24,7 +55,7 @@ def index():
     pagiantion = Pagination(page=page, total=len(all_questions), search=search, per_page=20, record_name='all_question', css_framework='bootstrap4')
     return render_template("index.html", all_question=all_question,pagination=pagiantion)
 
-@app.route("/", methods=["post"])
+@app.route("/home", methods=["post"])
 def get():
     create_title_id = request.form["create_title_id"]
     create_category_id = request.form["create_category_id"]
