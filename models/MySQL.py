@@ -77,17 +77,6 @@ class MySQL:
             print(questions)#テスト用
             return questions
 
-        """
-
-
-        i = 0
-        for i in range(20):
-            #                 id             title     category   date
-            questions.append([question_id+i,"タイトル","カテゴリ","202005241243"])
-        """
-
-        return questions
-
     """
     引　数：質問ID(question_id),行数(any_num)
     戻り値：データ配列（質問ID,タイトル,カテゴリ,日付）
@@ -117,17 +106,6 @@ class MySQL:
             print(questions)#テスト用
             return questions
 
-        """
-
-
-        i = 0
-        for i in range(20):
-            #                 id             title     category   date
-            questions.append([question_id+i,"タイトル","カテゴリ","202005241243"])
-        """
-
-        return questions
-
     """
     引　数：質問ID(question_id)
     戻り値：データ配列(ID・タイトル・カテゴリー・日付・本文)
@@ -156,15 +134,6 @@ class MySQL:
 
             return question
 
-        """
-        データ例
-
-        question.append("タイトル")
-        question.append("カテゴリー")
-        question.append("202007161015")
-        question.append("本文本文本文本文本文本文本文本文本文本文本文本文本文本文本文本文本文本文")
-        """
-
     """
     引　数：質問ID（question_id)
     戻り値：データ配列（回答ID・日付・回答内容）
@@ -190,13 +159,6 @@ class MySQL:
             self._close()
 
             return answer
-
-        """
-        データ例
-
-        answer.append(str(question_id) + "の１つ目の本文本文本文本文本文本文本文本文本文本文本文本文本文本文")
-        answer.append(str(question_id) + "の２つ目の本文本文本文本文本文本文本文本文本文本文本文本文本文本文")
-        """
 
     """
     引　数：検索文字(search_str)
@@ -225,12 +187,6 @@ class MySQL:
             self._close()
 
             return questions
-        """
-        データ例
-
-        questions.append([1,"タイトル1","カテゴリ1","202005241243"])
-        questions.append([3,"タイトル3","カテゴリ3","202007161015"])
-        """
 
     """
     引　数：質問のタイトル（question_title),質問のカテゴリ(question_category),質問の内容(question_text)
@@ -265,12 +221,6 @@ class MySQL:
 
             return True
 
-        """
-        データ例
-
-        print("registed: "+question_title+" "+question_category+" "+question_text)
-        """
-
     """
     引　数：質問ID(question_id),回答の内容(answer_text)
     戻り値：書き込みが成功かどうか（boolean型）
@@ -302,12 +252,6 @@ class MySQL:
             self._close()
 
             return True
-        
-        """
-        データ例
-
-        print("registed: "+str(question_id)+" "+answer_text)
-        """
 
     """
     引　数：質問ID(question_id)
@@ -315,17 +259,29 @@ class MySQL:
     機　能：指定したIDの質問を削除する(自動的に回答も削除される)
     """
     def delete_question(self, question_id):
+        
         self._open()
         
         try:
-            #回答の削除
             cursor = self.dbh.cursor()
+            
+            #IDの検索
+            stmt = "SELECT id, q_id FROM answer WHERE q_id = {}".format(question_id)
+            cursor.execute(stmt)
+            id_data = cursor.fetchall()
+
+            #user_questionで一致する質問IDの削除
+
+
+            #回答の削除
             stmt = "DELETE FROM answer WHERE q_id = {}".format(question_id)
             cursor.execute(stmt)
 
             #質問の削除
             stmt = "DELETE FROM question WHERE id = {}".format(question_id)
             cursor.execute(stmt)
+
+            stmt = "DELETE FROM user_question WHERE q_id = "
         
         except mysql.connector.Error as err:
             print(err)#テスト用
@@ -345,7 +301,7 @@ class MySQL:
     """
     引　数：ユーザID(user_id)、ユーザパス(user_pass)
     戻り値：ログインできたかどうか（boolean型）
-    機　能：ログインをする
+    機　能：ログイン認証をする
     """
     def check_account(self, user_id, user_password):
         login = [] 
@@ -416,6 +372,7 @@ class MySQL:
             return False
         
         else:
+            self.dbh.commit()
             cursor.close()
             self._close()
 
@@ -499,7 +456,8 @@ class MySQL:
     戻り値：Boolean型
     機　能：ユーザのIDがかぶっているかどうか
     """
-    def check_id_already_exists(self, user_id, user_profile):
+    #修正
+    def check_id_already_exists(self, user_id):
         user = []
 
         try:
@@ -578,7 +536,7 @@ class MySQL:
     戻り値：Boolean型
     機　能：質問の編集
     """
-    def check_id_already_exists(self, question_id, question_text):
+    def update_question_text(self, question_id, question_text):
         user = []
 
         try:
@@ -592,6 +550,7 @@ class MySQL:
             return False
         
         else:
+            self.dbh.commit()
             cursor.close()
             self._close()
             
@@ -602,7 +561,7 @@ class MySQL:
     戻り値：Boolean型
     機　能：回答の編集
     """
-    def check_id_already_exists(self, answer_id, answer_text):
+    def update_answer_text(self, answer_id, answer_text):
         user = []
 
         try:
@@ -616,7 +575,34 @@ class MySQL:
             return False
         
         else:
+            self.dbh.commit()
             cursor.close()
             self._close()
             
             return True
+    
+    """
+    引　数：回答ID(answer_id)
+    戻り値：削除が成功かどうか（boolean型）
+    機　能：指定したIDの回答を削除する
+
+    def delete_question(self, question_id):
+        self._open()
+        
+        try:
+            #回答の削除
+            cursor = self.dbh.cursor()
+            stmt = "DELETE FROM answer WHERE id = {}".format(question_id)
+            cursor.execute(stmt)
+        
+        except mysql.connector.Error as err:
+            print(err)#テスト用
+            return False
+        
+        else:
+            self.dbh.commit()
+            cursor.close()
+            self._close()
+
+            return True
+    """
