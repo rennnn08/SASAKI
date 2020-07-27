@@ -493,7 +493,9 @@ class MySQL:
 
         try:
             self._open()
-            stmt = "SELECT question.id, question.title, question.category, questuon.regist_date FROM user_question LEFT JOIN question ON user_question.q_id = question.id WHERE user_question.user_id >= '{}'".format(user_id)
+            stmt = "SELECT question.id, question.title, question.category, questuon.regist_date FROM user_question \
+                LEFT JOIN question ON user_question.q_id = question.id \
+                WHERE user_question.user_id = '{}'".format(user_id)
             cursor = self.dbh.cursor()
             cursor.execute(stmt)
             user_questions = cursor.fetchall()
@@ -513,14 +515,14 @@ class MySQL:
     戻り値：データ配列（回答ID,日付,回答内容）
     機　能：ユーザがした質問の一覧を渡す
     """
-    def extract_user_question(self, user_id):
+    def extract_user_answer(self, user_id):
         user_answers = []
 
         try:
             self._open()
             stmt = "SELECT answer.id, answer.regist_date answer.text FROM extract_user_answer \
                 LEFT JOIN answer ON extract_user_answer.a_id = answer.id \
-                WHERE user_answer.user_id >= '{}'".format(user_id)
+                WHERE user_answer.user_id = '{}'".format(user_id)
             cursor = self.dbh.cursor()
             cursor.execute(stmt)
             user_answers = cursor.fetchall()
