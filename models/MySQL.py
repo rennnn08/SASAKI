@@ -43,8 +43,6 @@ class MySQL:
         else:
             cursor.close()
             self._close()
-
-            print(questions)#テスト用
             
         return questions
     
@@ -62,7 +60,7 @@ class MySQL:
                 JOIN user_question ON question.id = user_question.q_id \
                 JOIN user ON user_question.user_id = user.user_id \
                 WHERE question.id >= {}'.format(question_id)
-            cursor = self.dbh.cursor()
+            cursor = self.dbh.cursor(buffered = True)
             cursor.execute(stmt)
             questions = cursor.fetchmany(size=20)
             
@@ -74,7 +72,6 @@ class MySQL:
             cursor.close()
             self._close()
 
-            print(questions)#テスト用
             return questions
 
     """
@@ -91,7 +88,7 @@ class MySQL:
                 JOIN user_question ON question.id = user_question.q_id \
                 JOIN user ON user_question.user_id = user.user_id \
                 WHERE question.id >= {}'.format(question_id)
-            cursor = self.dbh.cursor()
+            cursor = self.dbh.cursor(buffered = True)
             cursor.execute(stmt)
             questions = cursor.fetchmany(size=any_num)
             
@@ -143,9 +140,9 @@ class MySQL:
         answer = []
         try:
             self._open()
-            stmt = 'SELECT answer.id, answer.regist_date, answer.text, user.user_id, user.user_name FROM question \
+            stmt = 'SELECT answer.id, answer.regist_date, answer.text, user.user_id, user.user_name FROM answer \
                 JOIN user_answer ON answer.id = user_answer.a_id \
-                JOIN user ON user_answer.a_id = user.user_id \
+                JOIN user ON user_answer.user_id = user.user_id \
                 WHERE answer.q_id = {}'.format(question_id)
             cursor = self.dbh.cursor()
             cursor.execute(stmt)
@@ -171,9 +168,9 @@ class MySQL:
         try:
             self._open()
             stmt = "SELECT question.id, question.title, question.category, question.regist_date, user.user_id, user.user_name FROM question \
-                JOIN user_question ON question.id = user_question.q_id\
-                JOIN user ON user_question.user_id = user.user_id\
-                WHERE title LIKE '%{}%' OR category LIKE '%{}%'".format(search_str)
+                JOIN user_question ON question.id = user_question.q_id \
+                JOIN user ON user_question.user_id = user.user_id \
+                WHERE title LIKE '%{}%' OR category LIKE '%{}%'".format(search_str, search_str)
             cursor = self.dbh.cursor()
             cursor.execute(stmt)
             questions = cursor.fetchall()
@@ -206,7 +203,7 @@ class MySQL:
             cursor.execute(stmt)
             row = cursor.fetchall()
 
-            stmt ="INSERT INTO user_question VALUES('{}', {})".format(user_id, row[0])
+            stmt ="INSERT INTO user_question VALUES('{}', {})".format(user_id, row[0][0])
             cursor.execute(stmt)
 
         
@@ -238,8 +235,9 @@ class MySQL:
             stmt = "SELECT MAX(id) FROM answer"
             cursor.execute(stmt)
             row = cursor.fetchall()
+            print(row)
 
-            stmt = "INSERT INTO user_question VALUES('{}', {})".format(user_id, row[0])
+            stmt = "INSERT INTO user_question VALUES('{}', {})".format(user_id, row[0][0])
             cursor.execute(stmt)
 
         except mysql.connector.Error as err:
@@ -259,7 +257,8 @@ class MySQL:
     機　能：指定したIDの質問を削除する(自動的に回答も削除される)
     """
     def delete_question(self, question_id):
-        
+        a_flag = False
+
         self._open()
         
         try:
@@ -270,11 +269,15 @@ class MySQL:
             cursor.execute(stmt)
             a_id = cursor.fetchall()
 
-            if id_data:
+            for ans_ids in a_id:
+                #回答があった場合のフラグ
+                a_flag = True
+
                 #user_answerで一致する回答IDの削除
-                stmt = "DELETE FROM user_answer WHERE a_id = {}".format()
+                stmt = "DELETE FROM user_answer WHERE a_id = {}".format(ans_ids[0])
                 cursor.execute(stmt)
                 
+            if a_flag:
                 #回答の削除
                 stmt = "DELETE FROM answer WHERE q_id = {}".format(question_id)
                 cursor.execute(stmt)
@@ -313,8 +316,8 @@ class MySQL:
         
         try:
             #ログイン
-            stmt = "SELECT user_id, user_pass FROM user \
-                WHERE user_id = '{}' AND user_pass = '{}'".format(user_id, user_password)
+            stmt = "SELECT user_id, user_password FROM user \
+                WHERE user_id = '{}' AND user_password = '{}'".format(user_id, user_password)
             cursor = self.dbh.cursor()
             cursor.execute(stmt)
             login = cursor.fetchall()
@@ -367,7 +370,7 @@ class MySQL:
 
         try:
             self._open()
-            stmt = "INSERT INTO user(user_id, user_password, user_name, user_sex) VALUES('{}', '{}', '{}', '{}')".format(user_id, user_password, user_name, user_sex)
+            stmt = "INSERT INTO user(user_id, user_password, user_name, sex) VALUES('{}', '{}', '{}', {})".format(user_id, user_password, user_name, user_sex)
             cursor = self.dbh.cursor()
             cursor.execute(stmt)
         
@@ -392,7 +395,7 @@ class MySQL:
 
         try:
             self._open()
-            stmt = "SELECT user_name, user_sex, user_profile FROM user WHERE user_id = '{}'".format(user_id)
+            stmt = "SELECT user_name, sex, profile FROM user WHERE user_id = '{}'".format(user_id)
             cursor = self.dbh.cursor()
             cursor.execute(stmt)
             user = cursor.fetchall()
@@ -441,7 +444,7 @@ class MySQL:
 
         try:
             self._open()
-            stmt = "UPDATE user SET user_profile = '{}' WHERE user_id = '{}'".format(user_profile, user_id)
+            stmt = "UPDATE user SET profile = '{}' WHERE user_id = '{}'".format(user_profile, user_id)
             cursor = self.dbh.cursor()
             cursor.execute(stmt)
         
@@ -460,7 +463,6 @@ class MySQL:
     戻り値：Boolean型
     機　能：ユーザのIDがかぶっているかどうか
     """
-    #修正
     def check_id_already_exists(self, user_id):
         user = []
 
@@ -469,6 +471,7 @@ class MySQL:
             stmt = "SELECT user_id FROM user WHERE user_id = '{}'".format(user_id)
             cursor = self.dbh.cursor()
             cursor.execute(stmt)
+            user = cursor.fetchall()
         
         except mysql.connector.Error as err:
             print(err)#テスト用
@@ -493,7 +496,7 @@ class MySQL:
 
         try:
             self._open()
-            stmt = "SELECT question.id, question.title, question.category, questuon.regist_date FROM user_question \
+            stmt = "SELECT question.id, question.title, question.category, question.regist_date FROM user_question \
                 LEFT JOIN question ON user_question.q_id = question.id \
                 WHERE user_question.user_id = '{}'".format(user_id)
             cursor = self.dbh.cursor()
@@ -520,8 +523,8 @@ class MySQL:
 
         try:
             self._open()
-            stmt = "SELECT answer.id, answer.regist_date answer.text FROM extract_user_answer \
-                LEFT JOIN answer ON extract_user_answer.a_id = answer.id \
+            stmt = "SELECT answer.id, answer.regist_date, answer.text FROM user_answer \
+                LEFT JOIN answer ON user_answer.a_id = answer.id \
                 WHERE user_answer.user_id = '{}'".format(user_id)
             cursor = self.dbh.cursor()
             cursor.execute(stmt)
