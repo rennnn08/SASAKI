@@ -9,11 +9,15 @@
     </head>
     <body>
         {% include "header.html" %}
+        <div class="container">
         <div class="main">
             <form method="post" action="/search">
-                <input type="text" name="search_word" class="input-text" placeholder="検索">
-                <input type="submit" class="input-button btn btn-info" value="検索">
+                <div class="input-group">
+                    <input type="text" name="search_word" class="input-text form-control col-6 offset-3" placeholder="検索">
+                    <input type="submit" class="input-button btn btn-info" value="検索">
+                </div>
             </form>
+            
 
             <a href="{{ url_for('create_question') }}" role="button" class="btn btn-info m-3">質問作成</a>
 
@@ -28,11 +32,11 @@
                 </thread>
                 <tbody class="m-auto">
                     {% for question in all_question %}
-                        <tr class="border-bottom">
+                        <tr class="border-bottom ">
                             <td><a href="{{url_for('answer_regist',question_id=question[0])}}">{{ loop.index + pagination.skip }}</a></td>
-                            <td>{{question[2]}}</td>
-                            <td>{{question[1]}}</td>
-                            <td>{{question[3]}}</td>
+                            <td><a href="{{url_for('answer_regist',question_id=question[0])}}">{{question[2]}}</a></td>
+                            <td><a href="{{url_for('answer_regist',question_id=question[0])}}">{{question[1]}}</a></td>
+                            <td><a href="{{url_for('answer_regist',question_id=question[0])}}">{{question[3]}}</a></td>
                         </tr>
                     {% endfor %}
                 </tbody>
@@ -40,5 +44,6 @@
             <div class="d-flex justify-content-center m-3">{{ pagination.links }}</div>
 
         </div>
+    </div>
     </body>
 </html>

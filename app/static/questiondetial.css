@@ -1,5 +1,6 @@
 .deeppage{
-    margin-top:120px;
+    margin-top:50px;
+    margin-bottom: 50px;
 }
 
 form{
@@ -16,11 +17,6 @@ form{
     width:800px;
     border : solid 1px #333 ; 
     background-color:#fff;
-}
-
-body {
-    margin: 0;
-    padding: 0;
 }
 
 .detail_textarea {

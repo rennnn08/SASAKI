@@ -7,20 +7,37 @@
     <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.0/css/bootstrap.min.css" integrity="sha384-9aIt2nRpC12Uk9gS9baDl411NQApFmC26EwAOH8WgZl5MYYxFfc+NcPb1dKGj7Sk" crossorigin="anonymous">
     <link rel="stylesheet" type="text/css" href="{{ staticfile('style.css') }}">
     <link rel="stylesheet" type="text/css" href="{{ staticfile('header.css') }}">
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
 </head>
 <body>
     {% include "header.html" %}
     <div class="container">
-        <h1>{{user_name}}</h1>
-        <a href="#" role="button" class="btn btn-info m-3">編集</a>
-        <div class="form-group mt-5">
-            <label for="exampleFormControlTextarea1">プロフィール</label>
-            <textarea class="form-control" id="exampleFormControlTextarea1" rows="3"></textarea>
+        
+        <div class="d-flex justify-content-center mt-5">
+            <form method="POST" action="/get_user_name">
+                <input type="text" name="username" value="{{user_name}}" readonly id="input" class="display_target">
+                <a href="#" role="button" class="btn btn-info ml-2 h-100 edit edit_on on" id="button">編集</a>
+                <input type="submit" class="btn btn-info ml-2 h-100 cancel edit_off off" id="button" value="保存">
+            </form>
         </div>
-        <a href="#" role="button" class="btn btn-info m-3">編集</a>
-        <p>
+        
+        
+        
+        
+        <form method="POST" action="/get_user_profile">
+            <div class="form-group mt-3">
+                <label for="exampleFormControlTextarea1">プロフィール</label>
+                <textarea class="form-control" name="prof" rows="3" readonly id="textarea" class="display_target2">ewfwf{{prof}}</textarea>
+            </div>
+            <div class="text-right">
+                <a href="#" role="button" class="btn btn-info ml-2 h-100 edit edit_on2 on2" id="button">編集</a>
+                <input type="submit" class="btn btn-info ml-2 h-100 cancel edit_off2 off2" id="button" value="保存">
+            </div>
+        </form>
+        
+        <h4>
             質問投稿
-        </p>
+        </h4>
         {{ pagination.info}}
         <div class="d-flex justify-content-center m-2">{{ pagination.links}}</div>
             <table class="m-auto p-5 w-75">
@@ -45,3 +62,84 @@
     </div>
 </body>
 </html>
+
+<script>
+    $(document).ready(function() {
+    $('#button').click( function() {
+        $('#input').prop("readonly", false);
+    } );
+    } );
+</script>
+
+<script>
+    $(document).ready(function() {
+    $('.edit_off').click( function() {
+        $('#input').prop("readonly", true);
+    } );
+    } );
+</script>
+
+<script>
+    $('.edit_off').each(function(){
+        $(this).add($(this).find('.off')).hide();
+    });
+
+    var target;
+    var val;
+    $('.edit_on').click(function(){
+        target = $(this).find('input[type="text"]')
+        val = $(this).find('.display_target').text()
+        $(target).val(val)
+        $(this).add($(this).find('.on')).hide()
+        $('.off').show()
+    });
+
+    $('.edit_off').click(function(){
+        target = $(this).find('display_target')
+        val = $(this).find('input[type="text"]').val()
+        $(target).text(val)
+        $(this).add($(this).find('.off')).hide()
+        $('.on').show()
+    });
+</script>
+
+<script>
+    $(document).ready(function() {
+    $('.edit_on2').click( function() {
+        $('#textarea').prop("readonly", false);
+    } );
+    } );
+</script>
+
+<script>
+    $(document).ready(function() {
+    $('.edit_off2').click( function() {
+        $('#textarea').prop("readonly", true);
+    } );
+    } );
+</script>
+
+<script>
+    $('.edit_off2').each(function(){
+        $(this).add($(this).find('.off')).hide();
+    });
+
+    var target;
+    var val;
+    $('.edit_on2').click(function(){
+        target = $(this).find('input[type="text"]')
+        val = $(this).find('.display_target').text()
+        $(target).val(val)
+        $(this).add($(this).find('.on')).hide()
+        $('.off2').show()
+    });
+
+    $('.edit_off2').click(function(){
+        target = $(this).find('display_target')
+        val = $(this).find('input[type="text"]').val()
+        $(target).text(val)
+        $(this).add($(this).find('.off')).hide()
+        $('.on2').show()
+    });
+</script>
+
