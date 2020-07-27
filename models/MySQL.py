@@ -26,7 +26,6 @@ class MySQL:
     機　能：データベース内にある質問のテーブルデータを返す
     """
     def extract_all_questions(self):
-        questions = []
         try:
             self._open()
             stmt = 'SELECT question.id, question.title, question.category, question.regist_date, user.user_id, user.user_name FROM question \
@@ -52,8 +51,6 @@ class MySQL:
     機　能：データベースから20行ずつ質問を取得する。
     """
     def extract_20_questions(self, question_id):
-        questions = []
-
         try:
             self._open()
             stmt = 'SELECT question.id, question.title, question.category, question.regist_date, user.user_id, user.user_name FROM question \
@@ -66,13 +63,13 @@ class MySQL:
             
         except mysql.connector.Error as err:
             print(err)#テスト用
-            return []
+            questions = []
         
         else:
             cursor.close()
             self._close()
 
-            return questions
+        return questions
 
     """
     引　数：質問ID(question_id),行数(any_num)
@@ -80,8 +77,6 @@ class MySQL:
     機　能：データベースから指定した行数ずつ質問を取得する。
     """
     def extract_any_questions(self, question_id, any_num):
-        questions = []
-
         try:
             self._open()
             stmt = 'SELECT question.id, question.title, question.category, question.regist_date, user.user_id, user.user_name FROM question \
@@ -94,14 +89,14 @@ class MySQL:
             
         except mysql.connector.Error as err:
             print(err)#テスト用
-            return []
+            questions = []
         
         else:
             cursor.close()
             self._close()
 
             print(questions)#テスト用
-            return questions
+        return questions
 
     """
     引　数：質問ID(question_id)
@@ -109,8 +104,6 @@ class MySQL:
     機　能：Idでデータの行を検索し、渡す（質問本文）
     """
     def extract_question(self, question_id):
-        question = []
-
         try:
             self._open()
             stmt = 'SELECT question.id, question.title, question.category, question.regist_date, user.user_id, user.user_name FROM question \
@@ -123,13 +116,13 @@ class MySQL:
         
         except mysql.connector.Error as err:
             print(err)#テスト用
-            return []
+            question = []
         
         else:
             cursor.close()
             self._close()
 
-            return question
+        return question
 
     """
     引　数：質問ID（question_id)
@@ -137,7 +130,6 @@ class MySQL:
     機　能：質問の回答を渡す
     """
     def extract_answers(self, question_id):
-        answer = []
         try:
             self._open()
             stmt = 'SELECT answer.id, answer.regist_date, answer.text, user.user_id, user.user_name FROM answer \
@@ -150,12 +142,12 @@ class MySQL:
         
         except mysql.connector.Error as err:
             print(err)#テスト用
-            return []
+            answer = []
         else:
             cursor.close()
             self._close()
 
-            return answer
+        return answer
 
     """
     引　数：検索文字(search_str)
@@ -163,8 +155,6 @@ class MySQL:
     機　能：受け取った文字列が含まれる質問を返す
     """
     def search_title_category(self, search_str):
-        questions=[]
-
         try:
             self._open()
             stmt = "SELECT question.id, question.title, question.category, question.regist_date, user.user_id, user.user_name FROM question \
@@ -177,13 +167,13 @@ class MySQL:
         
         except mysql.connector.Error as err:
             print(err)#テスト用
-            return []
+            questions = []
         
         else:
             cursor.close()
             self._close()
 
-            return questions
+        return questions
 
     """
     引　数：質問のタイトル（question_title),質問のカテゴリ(question_category),質問の内容(question_text)
@@ -191,9 +181,8 @@ class MySQL:
     機　能：質問をデータベースに書き込む
     """
     def regist_question(self, question_title, question_category, question_text, user_id):
-        self._open()
-        
         try:
+            self._open()
             cursor = self.dbh.cursor()
             stmt = "INSERT INTO question(title, category, text) VALUES('{}', '{}', '{}')".format(question_title, question_category, question_text)
             cursor.execute(stmt)
@@ -224,9 +213,8 @@ class MySQL:
     機　能：質問への回答をデータベースに書き込む
     """
     def regist_answer(self, question_id, answer_text, user_id):
-        self._open()
-        
         try:
+            self._open()
             cursor = self.dbh.cursor()
             stmt = "INSERT INTO answer(text, q_id) VALUES('{}', {})".format(answer_text, question_id)
             cursor.execute(stmt)
@@ -259,9 +247,8 @@ class MySQL:
     def delete_question(self, question_id):
         a_flag = False
 
-        self._open()
-        
         try:
+            self._open()
             cursor = self.dbh.cursor()
             
             #IDの検索
@@ -311,10 +298,8 @@ class MySQL:
     機　能：ログイン認証をする
     """
     def check_account(self, user_id, user_password):
-        login = [] 
-        self._open()
-        
         try:
+            self._open()
             #ログイン
             stmt = "SELECT user_id, user_password FROM user \
                 WHERE user_id = '{}' AND user_password = '{}'".format(user_id, user_password)
@@ -342,8 +327,6 @@ class MySQL:
     機　能：受け取ったカテゴリが含まれる質問を返す
     """
     def search_category(self, search_category):
-        questions=[]
-
         try:
             self._open()
             stmt = "SELECT id, title, category, regist_date FROM question where category LIKE '%{}%'".format(search_category)
@@ -353,13 +336,13 @@ class MySQL:
         
         except mysql.connector.Error as err:
             print(err)#テスト用
-            return []
+            questions = []
         
         else:
             cursor.close()
             self._close()
 
-            return questions
+        return questions
 
     """
     引　数：ID(user_id),パスワード(user_password),名前(user_name),性別(user_sex)
@@ -367,7 +350,6 @@ class MySQL:
     機　能：ユーザの登録
     """
     def regist_user(self, user_id, user_password, user_name, user_sex):
-
         try:
             self._open()
             stmt = "INSERT INTO user(user_id, user_password, user_name, sex) VALUES('{}', '{}', '{}', {})".format(user_id, user_password, user_name, user_sex)
@@ -391,8 +373,6 @@ class MySQL:
     機　能：ユーザの詳細データを渡す
     """
     def get_user_info(self, user_id):
-        user=[]
-
         try:
             self._open()
             stmt = "SELECT user_name, sex, profile FROM user WHERE user_id = '{}'".format(user_id)
@@ -402,14 +382,13 @@ class MySQL:
         
         except mysql.connector.Error as err:
             print(err)#テスト用
-            return []
+            user = []
         
         else:
             cursor.close()
             self._close()
 
-            return user
-    
+        return user    
     
     """
     引　数：ID(user_id),名前(user_name)
@@ -417,7 +396,6 @@ class MySQL:
     機　能：ユーザの名前の編集
     """
     def set_user_name(self, user_id, user_name):
-
         try:
             self._open()
             stmt = "UPDATE user SET user_name = '{}' WHERE user_id = '{}'".format(user_name, user_id)
@@ -441,7 +419,6 @@ class MySQL:
     機　能：ユーザのプロフィールの編集
     """
     def set_user_profile(self, user_id, user_profile):
-
         try:
             self._open()
             stmt = "UPDATE user SET profile = '{}' WHERE user_id = '{}'".format(user_profile, user_id)
@@ -464,8 +441,6 @@ class MySQL:
     機　能：ユーザのIDがかぶっているかどうか
     """
     def check_id_already_exists(self, user_id):
-        user = []
-
         try:
             self._open()
             stmt = "SELECT user_id FROM user WHERE user_id = '{}'".format(user_id)
@@ -492,8 +467,6 @@ class MySQL:
     機　能：ユーザがした質問の一覧を渡す
     """
     def extract_user_question(self, user_id):
-        user_questions = []
-
         try:
             self._open()
             stmt = "SELECT question.id, question.title, question.category, question.regist_date FROM user_question \
@@ -505,13 +478,13 @@ class MySQL:
         
         except mysql.connector.Error as err:
             print(err)#テスト用
-            return []
+            user_questions = []
         
         else:
             cursor.close()
             self._close()
             
-            return user_questions
+        return user_questions
     
     """
     引　数：ユーザID(user_id)
@@ -519,8 +492,6 @@ class MySQL:
     機　能：ユーザがした質問の一覧を渡す
     """
     def extract_user_answer(self, user_id):
-        user_answers = []
-
         try:
             self._open()
             stmt = "SELECT answer.id, answer.regist_date, answer.text FROM user_answer \
@@ -532,13 +503,13 @@ class MySQL:
         
         except mysql.connector.Error as err:
             print(err)#テスト用
-            return []
+            user_answers = []
         
         else:
             cursor.close()
             self._close()
             
-            return user_answers
+        return user_answers
         
     """
     引　数：質問ID(id),質問内容(text)
@@ -546,8 +517,6 @@ class MySQL:
     機　能：質問の編集
     """
     def update_question_text(self, question_id, question_text):
-        user = []
-
         try:
             self._open()
             stmt = "UPDATE question SET text = '{}' WHERE id = {}".format(question_text, question_id)
@@ -571,8 +540,6 @@ class MySQL:
     機　能：回答の編集
     """
     def update_answer_text(self, answer_id, answer_text):
-        user = []
-
         try:
             self._open()
             stmt = "UPDATE answer SET text = '{}' WHERE id = {}".format(answer_text, answer_id)
