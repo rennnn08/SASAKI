@@ -8,46 +8,66 @@
     </head>
     <body>
       {% include "header.html" %}
-      <div class="deeppage">
-          <a">ログインページ</a>
-          <a>>>アカウント作成</a>
-      </div>
+      <div class = "container">
+        <div class="deeppage">
+            <a">ログインページ</a>
+            <a>>>アカウント作成</a>
+        </div>
       <!--
         python create_accountに飛んで、処理してからrenderで/に飛ぶ
       -->
       <form action="/create_account" method="POST">
-          <div id="errorMessage"></div>
-          <label for="create_account_name">お名前:</label>
-          <input type= "text" maxlength="10" name="create_account_name"  class="name_textbox" required><br>
+        <div class = "d-flex justify-content-center">
+          <div id="errorMessage">
+            <label for="create_account_name">お名前:</label>
+            <input type= "text" maxlength="10" name="create_account_name"  class="name_textbox form-control"  required><br>
+            <div class = "form-group">
+              <label for="sex">性別:</label><br>
+              <div class="form-check form-check-inline">
+                <input class="form-check-input" type="radio" name="sex"  value="0" checked>
+                <label class="form-check-label" for="sex">秘匿</label>
+              </div>
+              <div class="form-check form-check-inline">
+                <input class="form-check-input" type="radio" name="sex"  value="1">
+                <label class="form-check-label" for="sex">男</label>
+              </div>
+              <div class="form-check form-check-inline">
+                <input class="form-check-input" type="radio" name="sex"  value="2">
+                <label class="form-check-label" for="sex">女</label>
+              </div>
+              <div class="form-check form-check-inline">
+                <input class="form-check-input" type="radio" name="sex"  value="3">
+                <label class="form-check-label" for="sex">その他</label>
+              </div>
+            </div>
+            <label for="create_account_id">id:</label>
+            <input type="text"  name="create_account_id" class="id_text name_textbox form-control" required>
 
-          <label for="create_account_id">id:</label>
-          <input type="text"  name="create_account_id" class="id_text" required>
-
-          <label for="password">パスワード:</label>
-          <input type="password" name="password" required><br>
-
-          <label for="passwordConfirm">パスワード（確認）:</label>
-          <input type="password" name="passwordConfirm"  required><br>
-          
-          <input type="submit" value="送信" name="send_question_button2"class="Common_button">
-
-      </form>
-      
-      <script>
-          var form = document.forms[0];
-          form.onsubmit = function() {
-            // エラーメッセージをクリアする
-            form.password.setCustomValidity("");
-            // パスワードの一致確認
-            if (form.password.value != form.passwordConfirm.value) {
-              // 一致していなかったら、エラーメッセージを表示する
-              form.password.setCustomValidity("パスワードと確認用パスワードが一致しません");
-            }
-          };
-          // 入力値チェックエラーが発生したときの処理
-          form.addEventListener("invalid", function() {
-            document.getElementById("errorMessage").innerHTML = "入力値にエラーがあります";
-          }, false);
-        </script>
+            <div class="form-group">
+              <label>パスワード</label>
+              <input type="password" class="form-control" name="password" id="password" required>
+            </div>
+            <div class="form-group">
+              <label>パスワード (再確認)</label>
+              <input type="password" class="form-control" name="confirm" oninput="CheckPassword(this)" required>
+            </div>
+            <input type="submit" value="送信" name="send_question_button2"class="Common_button">
+          </div>      
+        </div>      
+      </form>  
+    </div>
+    <script>
+      function CheckPassword(confirm){
+        // 入力値取得
+        var input1 = password.value;
+        var input2 = confirm.value;
+        // パスワード比較
+        if(input1 != input2){
+          confirm.setCustomValidity("入力値が一致しません。");
+        }else{
+          confirm.setCustomValidity('');
+        }
+      }
+    </script>
     </body>
 </html>

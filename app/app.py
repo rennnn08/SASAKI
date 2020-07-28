@@ -65,6 +65,8 @@ def create_account_post():
     create_account_name = request.form["create_account_name"]
     create_account_id = request.form["create_account_id"]
     password = request.form["password"]
+    sex = request.form["sex"]
+    db.regist_user(create_account_id,password,create_account_name,sex)
 
     page = request.args.get(get_page_parameter(), type=int, default=1)
     all_questions = db.extract_all_questions()
