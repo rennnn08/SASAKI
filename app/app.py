@@ -24,13 +24,12 @@ def login_post():
     try:
         LoginId = request.form["LoginId"]
         LoginPass = request.form["LoginPass"]
-        idarukana = 10
-        if idarukana == 10:
+        if db.check_account(LoginId,LoginPass):
             session["flag"] = True
             session["UserId"] = LoginId
             return redirect("/home")
         else:
-            Labeltext = ":IDまたはPASSが違います"
+            Labeltext = ":IDまたはパスが違います"
             return render_template("login.html",Labeltext=Labeltext)
             #IDとPASSを読み込んでデータべースへ問い合わせ
             #IDが存在しPASSがあっている場合マイページ?へ
@@ -61,7 +60,7 @@ def get():
     create_category_id = request.form["create_category_id"]
     create_detail_id = request.form["create_detail_id"]
 
-    db.regist_question(create_title_id,create_category_id,create_detail_id)
+    db.regist_question(create_title_id,create_category_id,create_detail_id,'1')
 
     search = False
     q = request.args.get('q')

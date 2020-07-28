@@ -9,11 +9,11 @@
     <body>
         {% include "header.html" %}
         <div class="deeppage">
-            <a href="..">ホームページ</a>
+            <a href="/home">ホームページ</a>
             <a>>>質問作成ページ</a>
         </div>
 
-        <form action="/" method="post">
+        <form action="/home" method="post">
             <input type="submit" value="送信" name="send_question_button1"class="Common_button">
             <p>タイトル</p>
             <p><input type="text" maxlength="30"name="create_title_id" class="title_textbox"></p>
