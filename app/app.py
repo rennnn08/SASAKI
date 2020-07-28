@@ -54,13 +54,30 @@ def index():
     pagiantion = Pagination(page=page, total=len(all_questions), search=search, per_page=20, record_name='all_question', css_framework='bootstrap4')
     return render_template("index.html", all_question=all_question,pagination=pagiantion)
 
-@app.route("/home", methods=["post"])
-def get():
-    create_title_id = request.form["create_title_id"]
-    create_category_id = request.form["create_category_id"]
-    create_detail_id = request.form["create_detail_id"]
+@app.route("/create_account")
+def create_account():
+    
+    return render_template("create_account.html")
 
-    db.regist_question(create_title_id,create_category_id,create_detail_id)
+@app.route("/create_account",methods=["POST"])
+def create_account_post():
+    create_account_name = request.form["create_account_name"]
+    create_account_id = request.form["create_account_id"]
+    password = request.form["password"]
+    sex = request.form["sex"]
+    db.regist_user(create_account_id,password,create_account_name,sex)
+
+    page = request.args.get(get_page_parameter(), type=int, default=1)
+    all_questions = db.extract_all_questions()
+    all_question = all_questions[(page - 1)*20: page*20]
+    pagiantion = Pagination(page=page, total=len(all_questions), search=search, per_page=20, record_name='all_question', css_framework='bootstrap4')
+    return render_template("index.html",all_question=all_question,pagination=pagiantion)
+
+@app.route("/", methods=["post"])
+def get():
+    
+
+    #db.regist_question(create_title_id,create_category_id,create_detail_id)
 
     search = False
     q = request.args.get('q')
@@ -127,14 +144,26 @@ def create_question():
     
     return render_template("create_question.html")
 
+@app.route("/create_question",methods=["POST"])
+def create_question_post():
+    create_title_id = request.form["create_title_id"]
+    create_category_id = request.form["create_category_id"]
+    create_detail_id = request.form["create_detail_id"]
+    db.regist_question(create_title_id,create_category_id,create_detail_id,1)
+
+    page = request.args.get(get_page_parameter(), type=int, default=1)
+    all_questions = db.extract_all_questions()
+    all_question = all_questions[(page - 1)*20: page*20]
+    pagiantion = Pagination(page=page, total=len(all_questions), search=search, per_page=20, record_name='all_question', css_framework='bootstrap4')
+    return render_template("index.html",all_question=all_question,pagination=pagiantion)
+    
 @app.route("/my_page")
 def my_page():
 
-    user_id = session.get('UserId')
+    user_id = session["UserId"]
     user_info = db.get_user_info(user_id)
-    user_name = user_info[0]
-    user_sex = user_info[1]
-    user_prof = user_info[2]
+    user_name = user_info[0][0]
+    user_prof = user_info[0][2]
 
     search = False
     q = request.args.get('q')
@@ -152,13 +181,12 @@ def my_page():
 def get_user_info():
 
     user_id = session.get('UserId')
-    user_name = request.form["username"]
-    db.set_user_name(user_id, user_name)
+    user_name = request.form["user_name"]
+    db.set_user_name(user_id,user_name)
 
     user_info = db.get_user_info(user_id)
-    user_name = user_info[0]
-    user_sex = user_info[1]
-    user_prof = user_info[2]
+    user_name = user_info[0][0]
+    user_prof = user_info[0][2]
 
     page = request.args.get(get_page_parameter(), type=int, default=1)
     all_questions = db.extract_all_questions()
