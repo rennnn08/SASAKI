@@ -49,7 +49,6 @@ def index():
         search = True
 
     page = request.args.get(get_page_parameter(), type=int, default=1)
-    #all_question = QuestionContent.query.all()
     all_questions = db.extract_all_questions()
     all_question = all_questions[(page - 1)*20: page*20]
     pagiantion = Pagination(page=page, total=len(all_questions), search=search, per_page=20, record_name='all_question', css_framework='bootstrap4')
@@ -69,7 +68,6 @@ def get():
         search = True
 
     page = request.args.get(get_page_parameter(), type=int, default=1)
-    #all_question = QuestionContent.query.all()
     all_questions = db.extract_all_questions()
     all_question = all_questions[(page - 1)*20: page*20]
     pagiantion = Pagination(page=page, total=len(all_questions), search=search, per_page=20, record_name='all_question', css_framework='bootstrap4')
@@ -144,7 +142,6 @@ def my_page():
         search = True
 
     page = request.args.get(get_page_parameter(), type=int, default=1)
-    #all_question = QuestionContent.query.all()
     all_questions = db.extract_all_questions()
     all_question = all_questions[(page - 1)*20: page*20]
     pagiantion = Pagination(page=page, total=len(all_questions), search=search, per_page=20, record_name='all_question', css_framework='bootstrap4')
