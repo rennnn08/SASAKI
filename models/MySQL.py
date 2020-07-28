@@ -223,7 +223,6 @@ class MySQL:
             stmt = "SELECT MAX(id) FROM answer"
             cursor.execute(stmt)
             row = cursor.fetchall()
-            print(row)
 
             stmt = "INSERT INTO user_question VALUES('{}', {})".format(user_id, row[0][0])
             cursor.execute(stmt)
