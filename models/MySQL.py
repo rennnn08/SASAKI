@@ -888,6 +888,8 @@ class MySQL:
             self._close()
             
             return True
+<<<<<<< HEAD
+=======
     
     """
     引　数：回答ID(answer_id)
@@ -915,3 +917,4 @@ class MySQL:
             return True
     """
 >>>>>>> cc46b8099f641157f2efe8d9a557bcfb6275a087
+>>>>>>> 148edd5ae0d801c4532164a0a52b2e2b846dadb9
