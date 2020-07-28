@@ -408,6 +408,7 @@ class MySQL:
             return False
         
         else:
+            cursor.commit()
             cursor.close()
             self._close()
 
@@ -432,6 +433,7 @@ class MySQL:
             return False
         
         else:
+            cursor.commit()
             cursor.close()
             self._close()
 
