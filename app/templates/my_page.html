@@ -1,0 +1,145 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>質問投稿サイト</title>
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.0/css/bootstrap.min.css" integrity="sha384-9aIt2nRpC12Uk9gS9baDl411NQApFmC26EwAOH8WgZl5MYYxFfc+NcPb1dKGj7Sk" crossorigin="anonymous">
+    <link rel="stylesheet" type="text/css" href="{{ staticfile('style.css') }}">
+    <link rel="stylesheet" type="text/css" href="{{ staticfile('header.css') }}">
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
+</head>
+<body>
+    {% include "header.html" %}
+    <div class="container">
+        
+        <div class="d-flex justify-content-center mt-5">
+            <form method="POST" action="/get_user_name">
+                <input type="text" name="username" value="{{user_name}}" readonly id="input" class="display_target">
+                <a href="#" role="button" class="btn btn-info ml-2 h-100 edit edit_on on" id="button">編集</a>
+                <input type="submit" class="btn btn-info ml-2 h-100 cancel edit_off off" id="button" value="保存">
+            </form>
+        </div>
+        
+        
+        
+        
+        <form method="POST" action="/get_user_profile">
+            <div class="form-group mt-3">
+                <label for="exampleFormControlTextarea1">プロフィール</label>
+                <textarea class="form-control" name="prof" rows="3" readonly id="textarea" class="display_target2">ewfwf{{prof}}</textarea>
+            </div>
+            <div class="text-right">
+                <a href="#" role="button" class="btn btn-info ml-2 h-100 edit edit_on2 on2" id="button">編集</a>
+                <input type="submit" class="btn btn-info ml-2 h-100 cancel edit_off2 off2" id="button" value="保存">
+            </div>
+        </form>
+        
+        <h4>
+            質問投稿
+        </h4>
+        {{ pagination.info}}
+        <div class="d-flex justify-content-center m-2">{{ pagination.links}}</div>
+            <table class="m-auto p-5 w-75">
+                <thread class="m-auto p-5">
+                    <th>#</th>
+                    <th>Catagory</th>
+                    <th>Title</th>
+                    <th>Date</th>
+                </thread>
+                <tbody class="m-auto">
+                    {% for question in all_question %}
+                        <tr class="border-bottom">
+                            <td><a href="{{url_for('answer_regist',question_id=question[0])}}">{{ loop.index + pagination.skip }}</a></td>
+                            <td>{{question[2]}}</td>
+                            <td>{{question[1]}}</td>
+                            <td>{{question[3]}}</td>
+                        </tr>
+                    {% endfor %}
+                </tbody>
+            </table>
+        <div class="d-flex justify-content-center m-3">{{ pagination.links }}</div>
+    </div>
+</body>
+</html>
+
+<script>
+    $(document).ready(function() {
+    $('#button').click( function() {
+        $('#input').prop("readonly", false);
+    } );
+    } );
+</script>
+
+<script>
+    $(document).ready(function() {
+    $('.edit_off').click( function() {
+        $('#input').prop("readonly", true);
+    } );
+    } );
+</script>
+
+<script>
+    $('.edit_off').each(function(){
+        $(this).add($(this).find('.off')).hide();
+    });
+
+    var target;
+    var val;
+    $('.edit_on').click(function(){
+        target = $(this).find('input[type="text"]')
+        val = $(this).find('.display_target').text()
+        $(target).val(val)
+        $(this).add($(this).find('.on')).hide()
+        $('.off').show()
+    });
+
+    $('.edit_off').click(function(){
+        target = $(this).find('display_target')
+        val = $(this).find('input[type="text"]').val()
+        $(target).text(val)
+        $(this).add($(this).find('.off')).hide()
+        $('.on').show()
+    });
+</script>
+
+<script>
+    $(document).ready(function() {
+    $('.edit_on2').click( function() {
+        $('#textarea').prop("readonly", false);
+    } );
+    } );
+</script>
+
+<script>
+    $(document).ready(function() {
+    $('.edit_off2').click( function() {
+        $('#textarea').prop("readonly", true);
+    } );
+    } );
+</script>
+
+<script>
+    $('.edit_off2').each(function(){
+        $(this).add($(this).find('.off')).hide();
+    });
+
+    var target;
+    var val;
+    $('.edit_on2').click(function(){
+        target = $(this).find('input[type="text"]')
+        val = $(this).find('.display_target').text()
+        $(target).val(val)
+        $(this).add($(this).find('.on')).hide()
+        $('.off2').show()
+    });
+
+    $('.edit_off2').click(function(){
+        target = $(this).find('display_target')
+        val = $(this).find('input[type="text"]').val()
+        $(target).text(val)
+        $(this).add($(this).find('.off')).hide()
+        $('.on2').show()
+    });
+</script>
+

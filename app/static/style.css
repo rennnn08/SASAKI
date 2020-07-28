@@ -22,3 +22,8 @@ td {
 .pagination {
     text-align: center;
 }
+
+td a {
+    display: block;
+    padding: 0.6em 0;
+ }
