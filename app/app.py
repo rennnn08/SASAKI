@@ -121,7 +121,8 @@ def answer_regist(question_id):
     try:
         responce_answers = []
         answer_text = request.form["answer_text"]
-        db.regist_answer(question_id,answer_text)
+        user_id = session["UserId"]
+        db.regist_answer(question_id,answer_text,user_id)
         answers = db.extract_answers(question_id)
         answerslen = len(answers)
         for ans in range(answerslen):
@@ -149,7 +150,8 @@ def create_question_post():
     create_title_id = request.form["create_title_id"]
     create_category_id = request.form["create_category_id"]
     create_detail_id = request.form["create_detail_id"]
-    db.regist_question(create_title_id,create_category_id,create_detail_id,1)
+    user_id = session["UserId"]
+    db.regist_question(create_title_id,create_category_id,create_detail_id,user_id)
 
     page = request.args.get(get_page_parameter(), type=int, default=1)
     all_questions = db.extract_all_questions()
@@ -171,7 +173,7 @@ def my_page():
         search = True
 
     page = request.args.get(get_page_parameter(), type=int, default=1)
-    all_questions = db.extract_all_questions()
+    all_questions = db.extract_user_question(user_id)
     all_question = all_questions[(page - 1)*20: page*20]
     pagiantion = Pagination(page=page, total=len(all_questions), search=search, per_page=20, record_name='all_question', css_framework='bootstrap4')
 
@@ -189,7 +191,7 @@ def get_user_info():
     user_prof = user_info[0][2]
 
     page = request.args.get(get_page_parameter(), type=int, default=1)
-    all_questions = db.extract_all_questions()
+    all_questions = db.extract_user_question(user_id)
     all_question = all_questions[(page - 1)*20: page*20]
     pagiantion = Pagination(page=page, total=len(all_questions), search=search, per_page=20, record_name='all_question', css_framework='bootstrap4')
 
@@ -200,16 +202,15 @@ def get_user_info():
 def get_user_profile():
 
     user_id = session.get('UserId')
-    user_prof = request.form["prof"]
-    db.set_user_name(user_id, user_prof)
+    user_prof = request.form["user_prof"]
+    db.set_user_profile(user_id, user_prof)
 
     user_info = db.get_user_info(user_id)
-    user_name = user_info[0]
-    user_sex = user_info[1]
-    user_prof = user_info[2]
+    user_name = user_info[0][0]
+    user_prof = user_info[0][2]
 
     page = request.args.get(get_page_parameter(), type=int, default=1)
-    all_questions = db.extract_all_questions()
+    all_questions = db.extract_user_question(user_id)
     all_question = all_questions[(page - 1)*20: page*20]
     pagiantion = Pagination(page=page, total=len(all_questions), search=search, per_page=20, record_name='all_question', css_framework='bootstrap4')
 
