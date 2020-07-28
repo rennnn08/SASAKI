@@ -224,7 +224,7 @@ class MySQL:
             cursor.execute(stmt)
             row = cursor.fetchall()
 
-            stmt = "INSERT INTO user_question VALUES('{}', {})".format(user_id, row[0][0])
+            stmt = "INSERT INTO user_answer VALUES('{}', {})".format(user_id, row[0][0])
             cursor.execute(stmt)
 
         except mysql.connector.Error as err:
