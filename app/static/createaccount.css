@@ -5,10 +5,7 @@
 /*入力フォーム*/
 form{
     /*中央寄せ*/
-    
-    width: 80%;
-    margin: 0 auto;
-    max-width: 100px;
+
 
 }
 
@@ -26,6 +23,9 @@ form{
     /*サイズ定義*/
     width:200px;
     height:1.5em;
+}
+.sexclass{
+    margin-left: 20px;
 }
 
 .detail_textarea {
