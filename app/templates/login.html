@@ -11,6 +11,13 @@
 
     {% include "header.html" %}
     <body>
+        {%if infoMessage != null%}
+            <ul>
+                <li>{{infoMessage}}
+                </li>
+            </ul>
+        {% endif %}
+
         <form action="/" method="post">
         <div class="LoginForm">
             <div class="LoginText">

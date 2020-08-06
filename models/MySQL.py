@@ -555,7 +555,6 @@ class MySQL:
             self._close()
             
             return True
-
     
     """
     引　数：回答ID(answer_id)

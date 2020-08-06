@@ -1,4 +1,4 @@
-from flask import Flask,render_template,request, redirect,session, url_for
+from flask import Flask,render_template,request, redirect,session,flash,url_for
 from models.models import QuestionContent
 from models.database import db_session
 from datetime import datetime
@@ -20,7 +20,7 @@ def login():
 @app.route("/",methods=["POST"])
 def login_post():
     #ログインフラグによって返すページを返る処理
-    
+       
     try:
         LoginId = request.form["LoginId"]
         LoginPass = request.form["LoginPass"]
@@ -65,18 +65,16 @@ def create_account():
 
 @app.route("/create_account",methods=["POST"])
 def create_account_post():
-    create_account_name = request.form["create_account_name"]
-    create_account_id = request.form["create_account_id"]
-    password = request.form["password"]
-    sex = request.form["sex"]
-    db.regist_user(create_account_id,password,create_account_name,sex)
-
-    page = request.args.get(get_page_parameter(), type=int, default=1)
-    all_questions = db.extract_all_questions()
-    all_question = all_questions[(page - 1)*20: page*20]
-    pagiantion = Pagination(page=page, total=len(all_questions), search=search, per_page=20, record_name='all_question', css_framework='bootstrap4')
-    return render_template("index.html",all_question=all_question,pagination=pagiantion)
-
+    if request.method == "POST":
+        if request.form["create_account_name"] and request.form["create_account_id"] and request.form["password"] and request.form["sex"]:
+            create_account_name = request.form["create_account_name"]
+            create_account_id = request.form["create_account_id"]
+            password = request.form["password"]
+            sex = request.form["sex"]
+            db.regist_user(create_account_id,password,create_account_name,sex)
+            infoMessage = "登録完了しました"
+            flash(infoMessage,"complete")
+            return render_template("login.html",infoMessage=infoMessage)
 @app.route("/", methods=["post"])
 def get():
     
@@ -156,6 +154,12 @@ def create_question_post():
     create_detail_id = request.form["create_detail_id"]
     user_id = session["UserId"]
     db.regist_question(create_title_id,create_category_id,create_detail_id,user_id)
+
+    page = request.args.get(get_page_parameter(), type=int, default=1)
+    all_questions = db.extract_all_questions()
+    all_question = all_questions[(page - 1)*20: page*20]
+    pagiantion = Pagination(page=page, total=len(all_questions), search=search, per_page=20, record_name='all_question', css_framework='bootstrap4')
+    return render_template("index.html",all_question=all_question,pagination=pagiantion)
 
     return redirect(url_for("index"))
     
