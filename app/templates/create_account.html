@@ -8,6 +8,12 @@
     </head>
     <body>
       {% include "header.html" %}
+
+      {% if infoMessage != null %}
+      <ul>
+        <li>{{infoMessage}}</li>
+      </ul>
+      {% endif %}
       <div class = "container">
       <form action="/create_account" method="POST">
         <div class = "d-flex justify-content-center">
