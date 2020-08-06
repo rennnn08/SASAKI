@@ -15,7 +15,7 @@
                 <li><a class="nav-link" href="{{ url_for('create_account') }}">アカウント作成</a></li>
 
                 {% if session["flag"]==True %}
-                    <li><a class="nav-link" href='#'>{{session["UserId"]}}</a></li>
+                    <li><a class="nav-link">{{session["UserId"]}}</a></li>
                 {% endif %}
             </ul>
         </nav>

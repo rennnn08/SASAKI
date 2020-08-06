@@ -349,7 +349,7 @@ class MySQL:
             stmt = "INSERT INTO user(user_id, user_password, user_name, sex) \
                 VALUES('?', '?', '?', ?)"
             cursor = self.dbh.cursor()
-            cursor.execute(stmt, user_id, user_password, user_name, user_sex)
+            cursor.execute(stmt)
         
         except mysql.connector.Error as err:
             print(err)#テスト用
