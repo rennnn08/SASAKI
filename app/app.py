@@ -24,8 +24,7 @@ def login_post():
     try:
         LoginId = request.form["LoginId"]
         LoginPass = request.form["LoginPass"]
-        idarukana = 10
-        if db.check_account(1,1):
+        if db.check_account(LoginId,LoginPass):
             session["flag"] = True
             session["UserId"] = LoginId
             return redirect("/home")
@@ -40,6 +39,11 @@ def login_post():
         Labeltext = ":ログインできません"
         return render_template("login.html",Labeltext=Labeltext)
     
+@app.route('/logout')
+def logout():
+    session.pop('UserId', None)
+    session.pop("flag", None)
+    return redirect("/")
 
 @app.route("/home")
 def index():
@@ -49,19 +53,35 @@ def index():
         search = True
 
     page = request.args.get(get_page_parameter(), type=int, default=1)
-    #all_question = QuestionContent.query.all()
     all_questions = db.extract_all_questions()
     all_question = all_questions[(page - 1)*20: page*20]
     pagiantion = Pagination(page=page, total=len(all_questions), search=search, per_page=20, record_name='all_question', css_framework='bootstrap4')
     return render_template("index.html", all_question=all_question,pagination=pagiantion)
 
-@app.route("/home", methods=["post"])
-def get():
-    create_title_id = request.form["create_title_id"]
-    create_category_id = request.form["create_category_id"]
-    create_detail_id = request.form["create_detail_id"]
+@app.route("/create_account")
+def create_account():
+    
+    return render_template("create_account.html")
 
-    db.regist_question(create_title_id,create_category_id,create_detail_id)
+@app.route("/create_account",methods=["POST"])
+def create_account_post():
+    create_account_name = request.form["create_account_name"]
+    create_account_id = request.form["create_account_id"]
+    password = request.form["password"]
+    sex = request.form["sex"]
+    db.regist_user(create_account_id,password,create_account_name,sex)
+
+    page = request.args.get(get_page_parameter(), type=int, default=1)
+    all_questions = db.extract_all_questions()
+    all_question = all_questions[(page - 1)*20: page*20]
+    pagiantion = Pagination(page=page, total=len(all_questions), search=search, per_page=20, record_name='all_question', css_framework='bootstrap4')
+    return render_template("index.html",all_question=all_question,pagination=pagiantion)
+
+@app.route("/", methods=["post"])
+def get():
+    
+
+    #db.regist_question(create_title_id,create_category_id,create_detail_id)
 
     search = False
     q = request.args.get('q')
@@ -69,7 +89,6 @@ def get():
         search = True
 
     page = request.args.get(get_page_parameter(), type=int, default=1)
-    #all_question = QuestionContent.query.all()
     all_questions = db.extract_all_questions()
     all_question = all_questions[(page - 1)*20: page*20]
     pagiantion = Pagination(page=page, total=len(all_questions), search=search, per_page=20, record_name='all_question', css_framework='bootstrap4')
@@ -106,7 +125,8 @@ def answer_regist(question_id):
     try:
         responce_answers = []
         answer_text = request.form["answer_text"]
-        db.regist_answer(question_id,answer_text)
+        user_id = session["UserId"]
+        db.regist_answer(question_id,answer_text,session["UserId"])
         answers = db.extract_answers(question_id)
         answerslen = len(answers)
         for ans in range(answerslen):
@@ -129,10 +149,13 @@ def create_question():
     
     return render_template("create_question.html")
 
-@app.route("/my_page")
-def my_page():
-
-    user_name="山本蓮"
+@app.route("/create_question",methods=["POST"])
+def create_question_post():
+    create_title_id = request.form["create_title_id"]
+    create_category_id = request.form["create_category_id"]
+    create_detail_id = request.form["create_detail_id"]
+    user_id = session["UserId"]
+    db.regist_question(create_title_id,create_category_id,create_detail_id,user_id)
 
     search = False
     q = request.args.get('q')
@@ -140,33 +163,67 @@ def my_page():
         search = True
 
     page = request.args.get(get_page_parameter(), type=int, default=1)
-    #all_question = QuestionContent.query.all()
     all_questions = db.extract_all_questions()
     all_question = all_questions[(page - 1)*20: page*20]
     pagiantion = Pagination(page=page, total=len(all_questions), search=search, per_page=20, record_name='all_question', css_framework='bootstrap4')
+    return render_template("index.html",all_question=all_question,pagination=pagiantion)
+    
+@app.route("/my_page")
+def my_page():
 
-    return render_template("my_page.html",pagination=pagiantion,all_question=all_question,user_name=user_name)
+    user_id = session["UserId"]
+    user_info = db.get_user_info(user_id)
+    user_name = user_info[0][0]
+    user_prof = user_info[0][2]
+
+    search = False
+    q = request.args.get('q')
+    if q:
+        search = True
+
+    page = request.args.get(get_page_parameter(), type=int, default=1)
+    all_questions = db.extract_user_question(user_id)
+    all_question = all_questions[(page - 1)*20: page*20]
+    pagiantion = Pagination(page=page, total=len(all_questions), search=search, per_page=20, record_name='all_question', css_framework='bootstrap4')
+
+    return render_template("my_page.html",pagination=pagiantion,all_question=all_question,user_name=user_name, user_prof = user_prof)
 
 @app.route("/get_user_name", methods=["POST"])
 def get_user_info():
+
+    user_id = session.get('UserId')
+    user_name = request.form["user_name"]
+    db.set_user_name(user_id,user_name)
+
+    user_info = db.get_user_info(user_id)
+    user_name = user_info[0][0]
+    user_prof = user_info[0][2]
+
     page = request.args.get(get_page_parameter(), type=int, default=1)
-    #all_question = QuestionContent.query.all()
-    all_questions = db.extract_all_questions()
+    all_questions = db.extract_user_question(user_id)
     all_question = all_questions[(page - 1)*20: page*20]
     pagiantion = Pagination(page=page, total=len(all_questions), search=search, per_page=20, record_name='all_question', css_framework='bootstrap4')
 
-    user_name = request.form["username"]
-    return render_template("my_page.html",pagination=pagiantion,all_question=all_question,user_name=user_name)
+    
+    return render_template("my_page.html",pagination=pagiantion,all_question=all_question,user_name=user_name, user_prof = user_prof)
 
 @app.route("/get_user_profile", methods=["POST"])
 def get_user_profile():
+
+    user_id = session.get('UserId')
+    user_prof = request.form["user_prof"]
+    db.set_user_profile(user_id, user_prof)
+
+    user_info = db.get_user_info(user_id)
+    user_name = user_info[0][0]
+    user_prof = user_info[0][2]
+
     page = request.args.get(get_page_parameter(), type=int, default=1)
-    all_questions = db.extract_all_questions()
+    all_questions = db.extract_user_question(user_id)
     all_question = all_questions[(page - 1)*20: page*20]
     pagiantion = Pagination(page=page, total=len(all_questions), search=search, per_page=20, record_name='all_question', css_framework='bootstrap4')
 
-    prof = request.form["prof"]
-    return render_template("my_page.html",pagination=pagiantion,all_question=all_question,prof=prof)
+    return render_template("my_page.html",pagination=pagiantion,all_question=all_question,user_name=user_name, user_prof = user_prof)
 
 if __name__ == "__main__":
     app.run(debug=True)

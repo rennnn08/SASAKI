@@ -1,3 +1,4 @@
+<<<<<<< HEAD
 #<<<<<<< HEAD
 import mysql.connector
 import sys
@@ -330,6 +331,8 @@ class MySQL:
 
             return True
 #=======
+=======
+>>>>>>> 3334d91d7e08624c6e83de830d188061d36b9b6d
 import  mysql.connector
 import sys
 sys.dont_write_bytecode = True
@@ -354,7 +357,7 @@ class MySQL:
 
     """
     引　数：なし
-    戻り値：データ配列（ID・タイトル・カテゴリ・日付）
+    戻り値：データ配列（ID・タイトル・カテゴリ・日付,ユーザID,ユーザ名）
     機　能：データベース内にある質問のテーブルデータを返す
     """
     def extract_all_questions(self):
@@ -379,7 +382,7 @@ class MySQL:
     
     """
     引　数：質問ID(question_id)
-    戻り値：データ配列（質問ID,タイトル,カテゴリ,日付）
+    戻り値：データ配列（質問ID,タイトル,カテゴリ,日付,ユーザID,ユーザ名）
     機　能：データベースから20行ずつ質問を取得する。
     """
     def extract_20_questions(self, question_id):
@@ -405,8 +408,8 @@ class MySQL:
 
     """
     引　数：質問ID(question_id),行数(any_num)
-    戻り値：データ配列（質問ID,タイトル,カテゴリ,日付）
-    機　能：データベースから指定した行数ずつ質問を取得する。
+    戻り値：データ配列（質問ID,タイトル,カテゴリ,日付,ユーザID,ユーザ名）
+    機　能：データベースから指定した行数分だけ質問を渡す。
     """
     def extract_any_questions(self, question_id, any_num):
         try:
@@ -432,8 +435,8 @@ class MySQL:
 
     """
     引　数：質問ID(question_id)
-    戻り値：データ配列(ID・タイトル・カテゴリー・日付・本文)
-    機　能：Idでデータの行を検索し、渡す（質問本文）
+    戻り値：データ配列(ID,タイトル,カテゴリー,日付,本文,ユーザID,ユーザ名)
+    機　能：IDでデータの行を検索し、渡す（質問本文）
     """
     def extract_question(self, question_id):
         try:
@@ -458,7 +461,7 @@ class MySQL:
 
     """
     引　数：質問ID（question_id)
-    戻り値：データ配列（回答ID・日付・回答内容）
+    戻り値：データ配列（回答ID,日付,回答内容,ユーザID,ユーザ名）
     機　能：質問の回答を渡す
     """
     def extract_answers(self, question_id):
@@ -483,7 +486,7 @@ class MySQL:
 
     """
     引　数：検索文字(search_str)
-    戻り値：データ配列(質問ID・タイトル・カテゴリ・日付)
+    戻り値：データ配列(質問ID,タイトル,カテゴリ,日付,ユーザID,ユーザ名)
     機　能：受け取った文字列が含まれる質問を返す
     """
     def search_title_category(self, search_str):
@@ -508,7 +511,7 @@ class MySQL:
         return questions
 
     """
-    引　数：質問のタイトル（question_title),質問のカテゴリ(question_category),質問の内容(question_text)
+    引　数：質問のタイトル（question_title),質問のカテゴリ(question_category),質問の内容(question_text),ユーザID(user_id)
     戻り値：書き込みが成功かどうか（boolean型）
     機　能：質問をデータベースに書き込む
     """
@@ -540,7 +543,7 @@ class MySQL:
             return True
 
     """
-    引　数：質問ID(question_id),回答の内容(answer_text)
+    引　数：質問ID(question_id),回答の内容(answer_text),ユーザID(user_id)
     戻り値：書き込みが成功かどうか（boolean型）
     機　能：質問への回答をデータベースに書き込む
     """
@@ -555,9 +558,8 @@ class MySQL:
             stmt = "SELECT MAX(id) FROM answer"
             cursor.execute(stmt)
             row = cursor.fetchall()
-            print(row)
 
-            stmt = "INSERT INTO user_question VALUES('{}', {})".format(user_id, row[0][0])
+            stmt = "INSERT INTO user_answer VALUES('{}', {})".format(user_id, row[0][0])
             cursor.execute(stmt)
 
         except mysql.connector.Error as err:
@@ -619,10 +621,6 @@ class MySQL:
             self._close()
 
             return True
-    
-    #-----------------
-    #2020/07/23追加機能
-    #-----------------
 
     """
     引　数：ユーザID(user_id)、ユーザパス(user_pass)
@@ -655,13 +653,16 @@ class MySQL:
 
     """
     引　数：検索するカテゴリ(search_category)
-    戻り値：データ配列(質問ID・タイトル・カテゴリ・日付)
+    戻り値：データ配列(質問ID,タイトル,カテゴリ,日付,ユーザID,ユーザ名)
     機　能：受け取ったカテゴリが含まれる質問を返す
     """
     def search_category(self, search_category):
         try:
             self._open()
-            stmt = "SELECT id, title, category, regist_date FROM question where category LIKE '%{}%'".format(search_category)
+            stmt = "SELECT question.id, question.title, question.category, question.regist_date, user.user_id, user.user_name FROM question \
+                JOIN user_question ON question.id = user_question.q_id \
+                JOIN user ON user_question.user_id = user.user_id \
+                WHERE category LIKE '%{}%'".format(search_category)
             cursor = self.dbh.cursor()
             cursor.execute(stmt)
             questions = cursor.fetchall()
@@ -684,7 +685,8 @@ class MySQL:
     def regist_user(self, user_id, user_password, user_name, user_sex):
         try:
             self._open()
-            stmt = "INSERT INTO user(user_id, user_password, user_name, sex) VALUES('{}', '{}', '{}', {})".format(user_id, user_password, user_name, user_sex)
+            stmt = "INSERT INTO user(user_id, user_password, user_name, sex) \
+                VALUES('{}', '{}', '{}', {})".format(user_id, user_password, user_name, user_sex)
             cursor = self.dbh.cursor()
             cursor.execute(stmt)
         
@@ -707,7 +709,8 @@ class MySQL:
     def get_user_info(self, user_id):
         try:
             self._open()
-            stmt = "SELECT user_name, sex, profile FROM user WHERE user_id = '{}'".format(user_id)
+            stmt = "SELECT user_name, sex, profile \
+                FROM user WHERE user_id = '{}'".format(user_id)
             cursor = self.dbh.cursor()
             cursor.execute(stmt)
             user = cursor.fetchall()
@@ -730,7 +733,8 @@ class MySQL:
     def set_user_name(self, user_id, user_name):
         try:
             self._open()
-            stmt = "UPDATE user SET user_name = '{}' WHERE user_id = '{}'".format(user_name, user_id)
+            stmt = "UPDATE user SET user_name = '{}' \
+                WHERE user_id = '{}'".format(user_name, user_id)
             cursor = self.dbh.cursor()
             cursor.execute(stmt)
         
@@ -739,6 +743,7 @@ class MySQL:
             return False
         
         else:
+            self.dbh.commit()
             cursor.close()
             self._close()
 
@@ -753,7 +758,8 @@ class MySQL:
     def set_user_profile(self, user_id, user_profile):
         try:
             self._open()
-            stmt = "UPDATE user SET profile = '{}' WHERE user_id = '{}'".format(user_profile, user_id)
+            stmt = "UPDATE user SET profile = '{}' \
+                WHERE user_id = '{}'".format(user_profile, user_id)
             cursor = self.dbh.cursor()
             cursor.execute(stmt)
         
@@ -762,6 +768,7 @@ class MySQL:
             return False
         
         else:
+            self.dbh.commit()
             cursor.close()
             self._close()
 
@@ -775,7 +782,8 @@ class MySQL:
     def check_id_already_exists(self, user_id):
         try:
             self._open()
-            stmt = "SELECT user_id FROM user WHERE user_id = '{}'".format(user_id)
+            stmt = "SELECT user_id FROM user \
+                WHERE user_id = '{}'".format(user_id)
             cursor = self.dbh.cursor()
             cursor.execute(stmt)
             user = cursor.fetchall()
@@ -851,7 +859,8 @@ class MySQL:
     def update_question_text(self, question_id, question_text):
         try:
             self._open()
-            stmt = "UPDATE question SET text = '{}' WHERE id = {}".format(question_text, question_id)
+            stmt = "UPDATE question SET text = '{}' \
+                WHERE id = {}".format(question_text, question_id)
             cursor = self.dbh.cursor()
             cursor.execute(stmt)
         
@@ -874,7 +883,8 @@ class MySQL:
     def update_answer_text(self, answer_id, answer_text):
         try:
             self._open()
-            stmt = "UPDATE answer SET text = '{}' WHERE id = {}".format(answer_text, answer_id)
+            stmt = "UPDATE answer SET text = '{}' \
+                WHERE id = {}".format(answer_text, answer_id)
             cursor = self.dbh.cursor()
             cursor.execute(stmt)
         
@@ -888,6 +898,7 @@ class MySQL:
             self._close()
             
             return True
+
     
     """
     引　数：回答ID(answer_id)
@@ -914,4 +925,8 @@ class MySQL:
 
             return True
     """
+<<<<<<< HEAD
 #>>>>>>> cc46b8099f641157f2efe8d9a557bcfb6275a087
+=======
+
+>>>>>>> 3334d91d7e08624c6e83de830d188061d36b9b6d

@@ -1,0 +1,47 @@
+.deeppage{
+    padding: 20px;
+    margin-bottom: 50px;
+}
+/*入力フォーム*/
+form{
+    /*中央寄せ*/
+
+
+}
+
+.name_textbox{
+    /*サイズ定義*/
+    width:200px;
+    height:1.5em;
+}
+
+.errorMessage {
+    color: red;
+}
+
+.id_text{
+    /*サイズ定義*/
+    width:200px;
+    height:1.5em;
+}
+.sexclass{
+    margin-left: 20px;
+}
+
+.detail_textarea {
+    /*サイズ定義*/
+    white-space: pre-wrap;
+    width:  200px;
+    height: 1.5em;
+    resize:none;
+}
+
+.Common_button2{
+    /*右寄せ*/
+    float: right;
+}
+
+body {
+    margin: 0;
+    padding: 0;
+}

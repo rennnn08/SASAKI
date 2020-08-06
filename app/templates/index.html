@@ -25,7 +25,7 @@
             <div class="d-flex justify-content-center m-2">{{ pagination.links}}</div>
             <table class="m-auto p-5 w-75">
                 <thread class="m-auto p-5">
-                    <th>#</th>
+                    <th>UserName</th>
                     <th>Catagory</th>
                     <th>Title</th>
                     <th>Date</th>
@@ -33,7 +33,7 @@
                 <tbody class="m-auto">
                     {% for question in all_question %}
                         <tr class="border-bottom ">
-                            <td><a href="{{url_for('answer_regist',question_id=question[0])}}">{{ loop.index + pagination.skip }}</a></td>
+                            <td><a href="{{url_for('answer_regist',question_id=question[0])}}">{{ question[5] }}</a></td>
                             <td><a href="{{url_for('answer_regist',question_id=question[0])}}">{{question[2]}}</a></td>
                             <td><a href="{{url_for('answer_regist',question_id=question[0])}}">{{question[1]}}</a></td>
                             <td><a href="{{url_for('answer_regist',question_id=question[0])}}">{{question[3]}}</a></td>

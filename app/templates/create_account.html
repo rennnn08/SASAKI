@@ -1,0 +1,73 @@
+<!DOCTYPE html>
+<html name="home_page">
+    <head>
+        <title>アカウント作成</title>
+        <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.0/css/bootstrap.min.css" integrity="sha384-9aIt2nRpC12Uk9gS9baDl411NQApFmC26EwAOH8WgZl5MYYxFfc+NcPb1dKGj7Sk" crossorigin="anonymous">
+        <link rel="stylesheet" type="text/css" href="{{ staticfile('createaccount.css') }}">
+        <link rel="stylesheet" type="text/css" href="{{ staticfile('header.css') }}">
+    </head>
+    <body>
+      {% include "header.html" %}
+      <div class = "container">
+        <div class="deeppage">
+            <a">ログインページ</a>
+            <a>>>アカウント作成</a>
+        </div>
+      <!--
+        python create_accountに飛んで、処理してからrenderで/に飛ぶ
+      -->
+      <form action="/create_account" method="POST">
+        <div class = "d-flex justify-content-center">
+          <div id="errorMessage">
+            <label for="create_account_name">お名前:</label>
+            <input type= "text" maxlength="10" name="create_account_name"  class="name_textbox form-control"  required><br>
+            <div class = "form-group">
+              <label for="sex">性別:</label><br>
+              <div class="form-check form-check-inline">
+                <input class="form-check-input" type="radio" name="sex"  value="0" checked>
+                <label class="form-check-label" for="sex">秘匿</label>
+              </div>
+              <div class="form-check form-check-inline">
+                <input class="form-check-input" type="radio" name="sex"  value="1">
+                <label class="form-check-label" for="sex">男</label>
+              </div>
+              <div class="form-check form-check-inline">
+                <input class="form-check-input" type="radio" name="sex"  value="2">
+                <label class="form-check-label" for="sex">女</label>
+              </div>
+              <div class="form-check form-check-inline">
+                <input class="form-check-input" type="radio" name="sex"  value="3">
+                <label class="form-check-label" for="sex">その他</label>
+              </div>
+            </div>
+            <label for="create_account_id">id:</label>
+            <input type="text"  name="create_account_id" class="id_text name_textbox form-control" required>
+
+            <div class="form-group">
+              <label>パスワード</label>
+              <input type="password" class="form-control" name="password" id="password" required>
+            </div>
+            <div class="form-group">
+              <label>パスワード (再確認)</label>
+              <input type="password" class="form-control" name="confirm" oninput="CheckPassword(this)" required>
+            </div>
+            <input type="submit" value="送信" name="send_question_button2"class="Common_button btn btn-primary">
+          </div>      
+        </div>      
+      </form>  
+    </div>
+    <script>
+      function CheckPassword(confirm){
+        // 入力値取得
+        var input1 = password.value;
+        var input2 = confirm.value;
+        // パスワード比較
+        if(input1 != input2){
+          confirm.setCustomValidity("入力値が一致しません。");
+        }else{
+          confirm.setCustomValidity('');
+        }
+      }
+    </script>
+    </body>
+</html>
