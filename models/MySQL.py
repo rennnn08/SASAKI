@@ -56,9 +56,9 @@ class MySQL:
             stmt = 'SELECT question.id, question.title, question.category, question.regist_date, user.user_id, user.user_name FROM question \
                 JOIN user_question ON question.id = user_question.q_id \
                 JOIN user ON user_question.user_id = user.user_id \
-                WHERE question.id >= {}'.format(question_id)
+                WHERE question.id >= ?'
             cursor = self.dbh.cursor(buffered = True)
-            cursor.execute(stmt)
+            cursor.execute(stmt, question_id)
             questions = cursor.fetchmany(size=20)
             
         except mysql.connector.Error as err:
@@ -82,9 +82,9 @@ class MySQL:
             stmt = 'SELECT question.id, question.title, question.category, question.regist_date, user.user_id, user.user_name FROM question \
                 JOIN user_question ON question.id = user_question.q_id \
                 JOIN user ON user_question.user_id = user.user_id \
-                WHERE question.id >= {}'.format(question_id)
+                WHERE question.id >= ?'
             cursor = self.dbh.cursor(buffered = True)
-            cursor.execute(stmt)
+            cursor.execute(stmt, question_id)
             questions = cursor.fetchmany(size=any_num)
             
         except mysql.connector.Error as err:
@@ -106,12 +106,12 @@ class MySQL:
     def extract_question(self, question_id):
         try:
             self._open()
-            stmt = 'SELECT question.id, question.title, question.category, question.regist_date, user.user_id, user.user_name FROM question \
+            stmt = 'SELECT question.id, question.title, question.category, question.regist_date, question.text, user.user_id, user.user_name FROM question \
                 JOIN user_question ON question.id = user_question.q_id \
                 JOIN user ON user_question.user_id = user.user_id \
-                WHERE question.id = {}'.format(question_id)
+                WHERE question.id = ?'
             cursor = self.dbh.cursor()
-            cursor.execute(stmt)
+            cursor.execute(stmt, question_id)
             question = cursor.fetchall()
         
         except mysql.connector.Error as err:
@@ -135,9 +135,9 @@ class MySQL:
             stmt = 'SELECT answer.id, answer.regist_date, answer.text, user.user_id, user.user_name FROM answer \
                 JOIN user_answer ON answer.id = user_answer.a_id \
                 JOIN user ON user_answer.user_id = user.user_id \
-                WHERE answer.q_id = {}'.format(question_id)
+                WHERE answer.q_id = ?'
             cursor = self.dbh.cursor()
-            cursor.execute(stmt)
+            cursor.execute(stmt, question_id)
             answer = cursor.fetchall()
         
         except mysql.connector.Error as err:
@@ -160,9 +160,9 @@ class MySQL:
             stmt = "SELECT question.id, question.title, question.category, question.regist_date, user.user_id, user.user_name FROM question \
                 JOIN user_question ON question.id = user_question.q_id \
                 JOIN user ON user_question.user_id = user.user_id \
-                WHERE title LIKE '%{}%' OR category LIKE '%{}%'".format(search_str, search_str)
+                WHERE title LIKE '%?%' OR category LIKE '%?%'"
             cursor = self.dbh.cursor()
-            cursor.execute(stmt)
+            cursor.execute(stmt, search_str, search_str)
             questions = cursor.fetchall()
         
         except mysql.connector.Error as err:
@@ -184,16 +184,16 @@ class MySQL:
         try:
             self._open()
             cursor = self.dbh.cursor()
-            stmt = "INSERT INTO question(title, category, text) VALUES('{}', '{}', '{}')".format(question_title, question_category, question_text)
-            cursor.execute(stmt)
+            stmt = "INSERT INTO question(title, category, text) VALUES('?', '?', '?')"
+            cursor.execute(stmt, question_title, question_category, question_text)
 
             #questionテーブルのidの最大値を取得
             stmt = "SELECT MAX(id) FROM question"
             cursor.execute(stmt)
             row = cursor.fetchall()
 
-            stmt ="INSERT INTO user_question VALUES('{}', {})".format(user_id, row[0][0])
-            cursor.execute(stmt)
+            stmt ="INSERT INTO user_question VALUES('?', ?)"
+            cursor.execute(stmt, user_id, row[0][0])
 
         
         except mysql.connector.Error as err:
@@ -216,16 +216,16 @@ class MySQL:
         try:
             self._open()
             cursor = self.dbh.cursor()
-            stmt = "INSERT INTO answer(text, q_id) VALUES('{}', {})".format(answer_text, question_id)
-            cursor.execute(stmt)
+            stmt = "INSERT INTO answer(text, q_id) VALUES('?', ?)"
+            cursor.execute(stmt, answer_text, question_id)
 
             #questionテーブルのidの最大値を取得
             stmt = "SELECT MAX(id) FROM answer"
             cursor.execute(stmt)
             row = cursor.fetchall()
 
-            stmt = "INSERT INTO user_answer VALUES('{}', {})".format(user_id, row[0][0])
-            cursor.execute(stmt)
+            stmt = "INSERT INTO user_answer VALUES('?', ?)"
+            cursor.execute(stmt, user_id, row[0][0])
 
         except mysql.connector.Error as err:
             print(err)#テスト用
@@ -251,30 +251,26 @@ class MySQL:
             cursor = self.dbh.cursor()
             
             #IDの検索
-            stmt = "SELECT id FROM answer WHERE q_id = {}".format(question_id)
-            cursor.execute(stmt)
+            stmt = "SELECT id FROM answer WHERE q_id = ?"
+            cursor.execute(stmt, quesiton_id)
             a_id = cursor.fetchall()
 
             for ans_ids in a_id:
-                #回答があった場合のフラグ
-                a_flag = True
-
                 #user_answerで一致する回答IDの削除
-                stmt = "DELETE FROM user_answer WHERE a_id = {}".format(ans_ids[0])
-                cursor.execute(stmt)
+                stmt = "DELETE FROM user_answer WHERE a_id = ?"
+                cursor.execute(stmt, ans_ids[0])
                 
-            if a_flag:
                 #回答の削除
-                stmt = "DELETE FROM answer WHERE q_id = {}".format(question_id)
-                cursor.execute(stmt)
+                stmt = "DELETE FROM answer WHERE q_id = ?"
+                cursor.execute(stmt, question_id)
             
             #user_questionで一致する質問IDの削除
-            stmt = "DELETE FROM user_question WHERE q_id = {}".format(question_id)
-            cursor.execute(stmt)
+            stmt = "DELETE FROM user_question WHERE q_id = ?"
+            cursor.execute(stmt, question_id)
 
             #質問の削除
-            stmt = "DELETE FROM question WHERE id = {}".format(question_id)
-            cursor.execute(stmt)
+            stmt = "DELETE FROM question WHERE id = ?"
+            cursor.execute(stmt, question_id)
         
         except mysql.connector.Error as err:
             print(err)#テスト用
@@ -297,9 +293,9 @@ class MySQL:
             self._open()
             #ログイン
             stmt = "SELECT user_id, user_password FROM user \
-                WHERE user_id = '{}' AND user_password = '{}'".format(user_id, user_password)
+                WHERE user_id = '?' AND user_password = '?'"
             cursor = self.dbh.cursor()
-            cursor.execute(stmt)
+            cursor.execute(stmt, user_id, user_password)
             login = cursor.fetchall()
         
         except mysql.connector.Error as err:
@@ -327,9 +323,9 @@ class MySQL:
             stmt = "SELECT question.id, question.title, question.category, question.regist_date, user.user_id, user.user_name FROM question \
                 JOIN user_question ON question.id = user_question.q_id \
                 JOIN user ON user_question.user_id = user.user_id \
-                WHERE category LIKE '%{}%'".format(search_category)
+                WHERE category LIKE '%?%'"
             cursor = self.dbh.cursor()
-            cursor.execute(stmt)
+            cursor.execute(stmt, search_category)
             questions = cursor.fetchall()
         
         except mysql.connector.Error as err:
@@ -351,9 +347,9 @@ class MySQL:
         try:
             self._open()
             stmt = "INSERT INTO user(user_id, user_password, user_name, sex) \
-                VALUES('{}', '{}', '{}', {})".format(user_id, user_password, user_name, user_sex)
+                VALUES('?', '?', '?', ?)"
             cursor = self.dbh.cursor()
-            cursor.execute(stmt)
+            cursor.execute(stmt, user_id, user_password, user_name, user_sex)
         
         except mysql.connector.Error as err:
             print(err)#テスト用
@@ -375,9 +371,9 @@ class MySQL:
         try:
             self._open()
             stmt = "SELECT user_name, sex, profile \
-                FROM user WHERE user_id = '{}'".format(user_id)
+                FROM user WHERE user_id = '?'"
             cursor = self.dbh.cursor()
-            cursor.execute(stmt)
+            cursor.execute(stmt, user_id)
             user = cursor.fetchall()
         
         except mysql.connector.Error as err:
@@ -398,10 +394,9 @@ class MySQL:
     def set_user_name(self, user_id, user_name):
         try:
             self._open()
-            stmt = "UPDATE user SET user_name = '{}' \
-                WHERE user_id = '{}'".format(user_name, user_id)
+            stmt = "UPDATE user SET user_name = '?' WHERE user_id = '?'"
             cursor = self.dbh.cursor()
-            cursor.execute(stmt)
+            cursor.execute(stmt, user_name, user_id)
         
         except mysql.connector.Error as err:
             print(err)#テスト用
@@ -423,10 +418,9 @@ class MySQL:
     def set_user_profile(self, user_id, user_profile):
         try:
             self._open()
-            stmt = "UPDATE user SET profile = '{}' \
-                WHERE user_id = '{}'".format(user_profile, user_id)
+            stmt = "UPDATE user SET profile = '?' WHERE user_id = '?'"
             cursor = self.dbh.cursor()
-            cursor.execute(stmt)
+            cursor.execute(stmt, user_profile, user_id)
         
         except mysql.connector.Error as err:
             print(err)#テスト用
@@ -448,9 +442,9 @@ class MySQL:
         try:
             self._open()
             stmt = "SELECT user_id FROM user \
-                WHERE user_id = '{}'".format(user_id)
+                WHERE user_id = '?'"
             cursor = self.dbh.cursor()
-            cursor.execute(stmt)
+            cursor.execute(stmt, user_id)
             user = cursor.fetchall()
         
         except mysql.connector.Error as err:
@@ -476,9 +470,9 @@ class MySQL:
             self._open()
             stmt = "SELECT question.id, question.title, question.category, question.regist_date FROM user_question \
                 LEFT JOIN question ON user_question.q_id = question.id \
-                WHERE user_question.user_id = '{}'".format(user_id)
+                WHERE user_question.user_id = '?'"
             cursor = self.dbh.cursor()
-            cursor.execute(stmt)
+            cursor.execute(stmt, user_id)
             user_questions = cursor.fetchall()
         
         except mysql.connector.Error as err:
@@ -501,9 +495,9 @@ class MySQL:
             self._open()
             stmt = "SELECT answer.id, answer.regist_date, answer.text FROM user_answer \
                 LEFT JOIN answer ON user_answer.a_id = answer.id \
-                WHERE user_answer.user_id = '{}'".format(user_id)
+                WHERE user_answer.user_id = '?'"
             cursor = self.dbh.cursor()
-            cursor.execute(stmt)
+            cursor.execute(stmt, user_id)
             user_answers = cursor.fetchall()
         
         except mysql.connector.Error as err:
@@ -524,10 +518,9 @@ class MySQL:
     def update_question_text(self, question_id, question_text):
         try:
             self._open()
-            stmt = "UPDATE question SET text = '{}' \
-                WHERE id = {}".format(question_text, question_id)
+            stmt = "UPDATE question SET text = '?' WHERE id = ?"
             cursor = self.dbh.cursor()
-            cursor.execute(stmt)
+            cursor.execute(stmt, question_text, question_id)
         
         except mysql.connector.Error as err:
             print(err)#テスト用
@@ -548,10 +541,9 @@ class MySQL:
     def update_answer_text(self, answer_id, answer_text):
         try:
             self._open()
-            stmt = "UPDATE answer SET text = '{}' \
-                WHERE id = {}".format(answer_text, answer_id)
+            stmt = "UPDATE answer SET text = '?' WHERE id = ?"
             cursor = self.dbh.cursor()
-            cursor.execute(stmt)
+            cursor.execute(stmt, answer_text, answer_id)
         
         except mysql.connector.Error as err:
             print(err)#テスト用
@@ -576,7 +568,7 @@ class MySQL:
         try:
             #回答の削除
             cursor = self.dbh.cursor()
-            stmt = "DELETE FROM answer WHERE id = {}".format(question_id)
+            stmt = "DELETE FROM answer WHERE id = ?".format(question_id)
             cursor.execute(stmt)
         
         except mysql.connector.Error as err:
