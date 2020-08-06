@@ -1,14 +1,22 @@
 <header class="navbar navbar-expand-sm navbar-dark bg-primary">
     <div class="container">
-        <a class="navbar-brand" id="logo" href="/">質問投稿サイト</a>
+        <a class="navbar-brand" id="logo" href="{{ url_for('index') }}">質問投稿サイト</a>
     
     
         <nav>
             <ul class="nav navbar-nav navbar-right">
-                <li><a class="nav-link" href='/'>ホーム</a></li>
-                <li><a class="nav-link" href="{{ url_for('my_page') }}">MyPage</a></li>
-                <li><a class="nav-link" href='#'>ログイン</a></li>
-                <li><a class="nav-link" href="{{ url_for('create_account') }}"></a></li>
+                <li><a class="nav-link" href="{{ url_for('index') }}">ホーム</a></li>
+                {% if session["flag"]==True %}
+                    <li><a class="nav-link" href="{{ url_for('my_page') }}">MyPage</a></li>
+                {% else %}
+                <li><a class="nav-link" href="/">マイページ</a></li>
+                {% endif %}
+                <li><a class="nav-link" href='/'>ログイン</a></li>
+                <li><a class="nav-link" href="{{ url_for('create_account') }}">アカウント作成</a></li>
+
+                {% if session["flag"]==True %}
+                    <li><a class="nav-link">{{session["UserId"]}}</a></li>
+                {% endif %}
             </ul>
         </nav>
     </div>
