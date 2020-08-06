@@ -20,10 +20,12 @@
                 <input type="submit" class="btn btn-info ml-2 h-100 cancel edit_off off" id="button" value="保存">
             </form>
         </div>
-        
-        
-        
-        
+
+        <form action="{{ url_for('logout') }}"><br>
+            <br><input type="submit" class="Buttonin btn btn-info" name="Signout" value=SignOut style="float:right;"></form>
+        </form>
+             
+                
         <form method="POST" action="/get_user_profile">
             <div class="form-group mt-3">
                 <label for="exampleFormControlTextarea1">プロフィール</label>
