@@ -9,13 +9,13 @@
                 {% if session["flag"]==True %}
                     <li><a class="nav-link" href="{{ url_for('my_page') }}">MyPage</a></li>
                 {% else %}
-                <li><a class="nav-link" href="/">MyPage</a></li>
+                <li><a class="nav-link" href="/">マイページ</a></li>
                 {% endif %}
                 <li><a class="nav-link" href='/'>ログイン</a></li>
                 <li><a class="nav-link" href="{{ url_for('create_account') }}">アカウント作成</a></li>
 
                 {% if session["flag"]==True %}
-                    <li><a class="nav-link" href='#'>{{session["UserId"]}}</a></li>
+                    <li><a class="nav-link">{{session["UserId"]}}</a></li>
                 {% endif %}
             </ul>
         </nav>

@@ -22,16 +22,15 @@
             </div>
             <p><input type="text"  class="inputform"name="LoginPass"></p>
             <p>{{Labeltext}}</p>
-            <div class="CommonButton">
-            
-                <input type="submit" class="Buttonin" name="Signup" value=SignIn style="float:right;">
+            <div class="CommonButton ">
+                <input type="submit" class="btn btn-primary Buttonin" name="Signup" value="ログイン">
             </div>
         </div>
         </form>
         <div class="LoginForm">
         <div class="CommonButton">
             <form action="{{ url_for('create_account') }}"><br>
-                <br><input type="submit" class="Buttonin" name="Signout" value="アカウント登録" style="float:right;">
+                <br><input type="submit" class="btn btn-primary Buttonin" name="Signout" value="アカウント登録">
             </form>
         </div>
     </div>
