@@ -25,7 +25,7 @@ def login_post():
         LoginId = request.form["LoginId"]
         LoginPass = request.form["LoginPass"]
         idarukana = 10
-        if idarukana == 10:
+        if db.check_account(1,1):
             session["flag"] = True
             session["UserId"] = LoginId
             return redirect("/home")

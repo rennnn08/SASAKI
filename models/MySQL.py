@@ -1,4 +1,4 @@
-<<<<<<< HEAD
+#<<<<<<< HEAD
 import mysql.connector
 import sys
 sys.dont_write_bytecode = True
@@ -329,7 +329,7 @@ class MySQL:
             self._close()
 
             return True
-=======
+#=======
 import  mysql.connector
 import sys
 sys.dont_write_bytecode = True
@@ -914,4 +914,4 @@ class MySQL:
 
             return True
     """
->>>>>>> cc46b8099f641157f2efe8d9a557bcfb6275a087
+#>>>>>>> cc46b8099f641157f2efe8d9a557bcfb6275a087

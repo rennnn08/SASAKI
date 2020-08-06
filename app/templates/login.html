@@ -11,7 +11,8 @@
 
     {% include "header.html" %}
     <body>
-        <form action="/" method="post">
+    <div class="loginbox">
+    
         <div class="LoginForm">
             <div class="LoginText">
                 <p>ID</p>
@@ -21,21 +22,22 @@
                 <p>PassWord</p>
             </div>
             <p><input type="text"  class="inputform"name="LoginPass"></p>
-            <p>{{Labeltext}}</p>
-            <div class="CommonButton">
             
-                <input type="submit" class="Buttonin" name="Signup" value=SignIn style="float:right;">
-            </div>
-        </div>
-        </form>
-        <div class="LoginForm">
+                <div class="LabelText">
+                <p>{{Labeltext}}</p>
+                </div>
+        </div>    
+    
+    </div>
         <div class="CommonButton">
+            <form action="/" method="post">
+                <input type="submit" class="Buttonin" name="Signup" value=SignIn style="float:right;"></form>
+            </form>
+            
             <form action="/"><br>
                 <br><input type="submit" class="Buttonin" name="Signout" value=SignOut style="float:right;"></form>
             </form>
         </div>
-    </div>
-
     </body>
 
 </html>
