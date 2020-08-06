@@ -24,8 +24,7 @@ def login_post():
     try:
         LoginId = request.form["LoginId"]
         LoginPass = request.form["LoginPass"]
-        idarukana = 10
-        if idarukana == 10:
+        if db.check_account(LoginId,LoginPass):
             session["flag"] = True
             session["UserId"] = LoginId
             return redirect("/home")
@@ -157,6 +156,11 @@ def create_question_post():
     create_detail_id = request.form["create_detail_id"]
     user_id = session["UserId"]
     db.regist_question(create_title_id,create_category_id,create_detail_id,user_id)
+
+    search = False
+    q = request.args.get('q')
+    if q:
+        search = True
 
     page = request.args.get(get_page_parameter(), type=int, default=1)
     all_questions = db.extract_all_questions()
