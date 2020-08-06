@@ -11,6 +11,13 @@
 
     {% include "header.html" %}
     <body>
+        {%if infoMessage != null%}
+            <ul>
+                <li>{{infoMessage}}
+                </li>
+            </ul>
+        {% endif %}
+
         <form action="/" method="post">
         <div class="LoginForm">
             <div class="LoginText">
@@ -30,8 +37,8 @@
         </form>
         <div class="LoginForm">
         <div class="CommonButton">
-            <form action="/"><br>
-                <br><input type="submit" class="Buttonin" name="Signout" value=SignOut style="float:right;"></form>
+            <form action="{{ url_for('create_account') }}"><br>
+                <br><input type="submit" class="Buttonin" name="Signout" value="アカウント登録" style="float:right;">
             </form>
         </div>
     </div>

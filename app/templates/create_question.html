@@ -14,12 +14,12 @@
                 <a>>>質問作成ページ</a>
             </div>
 
-            <form action="/" method="post">
+            <form action="/create_question" method="post">
                 <input type="submit" value="送信" name="send_question_button1"class="Common_button btn btn-info">
                 <p>タイトル</p>
-                <p><input type="text" maxlength="30"name="create_title_id" class="title_textbox" required></p>
+                <p><input type="text" name="create_title_id" class="title_textbox" maxlength=30 required></p>
                 <p>カテゴリー</p>
-                <p><input type="text"id="category_textbox" name="create_category_id" class="category_textbox" required></p>
+                <p><input type="text"id="category_textbox" name="create_category_id" class="category_textbox" maxlength=30  required></p>
                 <p>本文</p>
                 <p><textarea name="create_detail_id" maxlength="3000"class = "detail_textarea" required></textarea></p>
                 <div class="Common_button2"><input type="submit" value="送信" name="send_question_button2"class="Common_button btn btn-info"></div>
