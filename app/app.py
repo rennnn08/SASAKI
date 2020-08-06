@@ -1,4 +1,4 @@
-from flask import Flask,render_template,request, redirect,session
+from flask import Flask,render_template,request, redirect,session, url_for
 from models.models import QuestionContent
 from models.database import db_session
 from datetime import datetime
@@ -157,16 +157,7 @@ def create_question_post():
     user_id = session["UserId"]
     db.regist_question(create_title_id,create_category_id,create_detail_id,user_id)
 
-    search = False
-    q = request.args.get('q')
-    if q:
-        search = True
-
-    page = request.args.get(get_page_parameter(), type=int, default=1)
-    all_questions = db.extract_all_questions()
-    all_question = all_questions[(page - 1)*20: page*20]
-    pagiantion = Pagination(page=page, total=len(all_questions), search=search, per_page=20, record_name='all_question', css_framework='bootstrap4')
-    return render_template("index.html",all_question=all_question,pagination=pagiantion)
+    return redirect(url_for("index"))
     
 @app.route("/my_page")
 def my_page():
