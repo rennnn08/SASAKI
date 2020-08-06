@@ -124,7 +124,7 @@ def answer_regist(question_id):
         responce_answers = []
         answer_text = request.form["answer_text"]
         user_id = session["UserId"]
-        db.regist_answer(question_id,answer_text,user_id)
+        db.regist_answer(question_id,answer_text,session["UserId"])
         answers = db.extract_answers(question_id)
         answerslen = len(answers)
         for ans in range(answerslen):

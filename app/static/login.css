@@ -1,21 +1,31 @@
-body{
+/*body{
     
     text-align: center;
 }
-.inputdorm{
+/*.inputdorm{
     width:auto;
+}*/
+.loginbox{
+    margin: 0 auto;
+    width: 280px;
+    height: 300px;
 }
+
 .LoginForm{
-    margin-right: 60%;
-    margin-left: 40%;
+    margin: 0 auto;
+    /*margin-right: 150px;
+    margin-left: 40px;*/
     position: relative;
     top: 50px;
     left: 50px;
 }
 .LoginText{
-    margin-right: 60%;
-    margin-left: 40%;
+    margin-left: 0;
 }
+/*.LabelText{
+    top: 50px;
+    left: 50px;
+}*/
 /*.CommonButton{
     margin-right: 40%;
     margin-left: 60%;

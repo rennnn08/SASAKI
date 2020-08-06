@@ -11,23 +11,17 @@
 
     {% include "header.html" %}
     <body>
-        {%if infoMessage != null%}
-            <ul>
-                <li>{{infoMessage}}
-                </li>
-            </ul>
-        {% endif %}
-
-        <form action="/" method="post">
+    <div class="loginbox">
+    <form action="/" method="post">
         <div class="LoginForm">
             <div class="LoginText">
                 <p>ID</p>
             </div>
-            <p><input type="text" class="inputform" name="LoginId" ></p>
+            <p><input type="text" class="inputform" name="LoginId" maxlength="30" pattern="^[0-9A-Za-z]+$"></p>
             <div class="LoginText">
                 <p>PassWord</p>
             </div>
-            <p><input type="text"  class="inputform"name="LoginPass"></p>
+            <p><input type="password"  class="inputform"name="LoginPass" maxlength="30"></p>
             <p>{{Labeltext}}</p>
             <div class="CommonButton ">
                 <input type="submit" class="btn btn-primary Buttonin" name="Signup" value="ログイン">
@@ -40,8 +34,7 @@
                 <br><input type="submit" class="btn btn-primary Buttonin" name="Signout" value="アカウント登録">
             </form>
         </div>
-    </div>
-
+    </form>
     </body>
 
 </html>
