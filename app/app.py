@@ -40,6 +40,11 @@ def login_post():
         Labeltext = ":ログインできません"
         return render_template("login.html",Labeltext=Labeltext)
     
+@app.route('/logout')
+def logout():
+    session.pop('UserId', None)
+    session.pop("flag", None)
+    return redirect("/")
 
 @app.route("/home")
 def index():
