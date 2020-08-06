@@ -9,13 +9,6 @@
     <body>
       {% include "header.html" %}
       <div class = "container">
-        <div class="deeppage">
-            <a">ログインページ</a>
-            <a>>>アカウント作成</a>
-        </div>
-      <!--
-        python create_accountに飛んで、処理してからrenderで/に飛ぶ
-      -->
       <form action="/create_account" method="POST">
         <div class = "d-flex justify-content-center">
           <div id="errorMessage">
@@ -41,15 +34,15 @@
               </div>
             </div>
             <label for="create_account_id">id:</label>
-            <input type="text"  name="create_account_id" class="id_text name_textbox form-control" required>
+            <input type="text"  name="create_account_id" class="id_text name_textbox form-control" maxlength = 20 required>
 
             <div class="form-group">
               <label>パスワード</label>
-              <input type="password" class="form-control" name="password" id="password" required>
+              <input type="password" class="form-control" name="password" id="password"style="ime-mode:disabled;" maxlength = 100 required>
             </div>
             <div class="form-group">
               <label>パスワード (再確認)</label>
-              <input type="password" class="form-control" name="confirm" oninput="CheckPassword(this)" required>
+              <input type="password" class="form-control" name="confirm" oninput="CheckPassword(this)" style="ime-mode:disabled;" maxlength = 100 required>
             </div>
             <input type="submit" value="送信" name="send_question_button2"class="Common_button btn btn-primary">
           </div>      

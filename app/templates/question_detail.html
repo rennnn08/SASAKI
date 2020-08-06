@@ -13,17 +13,18 @@
     
         <div class="container">
             <div class="deeppage">
-                <a href="..">ホームページ</a>
-                <a>>>質問概要</a>
+                <a href="/home">ホームページ</a>
+                <a>>>質問詳細</a>
             </div>
 
             <form>
                 <!--質問の概要-->
                 <table>
+                    <tr><th>タイトル</th></tr>
                     <tr><th name="create_title_id" class="Common_label" height="1em">{{create_title_id}}</th></tr>
-            
+                    <tr><th>カテゴリ</th></tr>           
                     <tr><th name="create_category_id" class="Common_label">{{create_category_id}}</th></tr>
-            
+                    <tr><th>本文</th></tr>
                     <tr><th name="create_detail_id"  class = "Common_label" height="500">{{create_detail_id}}</th></tr>
                 </table>
                 <input type="button" value="回答欄表示" onclick="clickBtn1()" class="btn btn-info">
