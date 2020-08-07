@@ -1,6 +1,4 @@
 from flask import Flask,render_template,request, redirect,session,flash,url_for
-from models.models import QuestionContent
-from models.database import db_session
 from datetime import datetime
 import os
 from flask_paginate import Pagination, get_page_parameter
@@ -19,7 +17,7 @@ def login():
 
 @app.route("/",methods=["POST"])
 def login_post():
-    #ログインフラグによって返すページを返る処理
+    #ログインフラグによって返すペ�?�ジを返る処�?
        
     try:
         LoginId = request.form["LoginId"]
@@ -29,13 +27,13 @@ def login_post():
             session["UserId"] = LoginId
             return redirect("/home")
         else:
-            Labeltext = ":IDまたはPASSが違います"
+            Labeltext = ":IDまた�?�PASSが違�?ま�?"
             return render_template("login.html",Labeltext=Labeltext)
-            #IDとPASSを読み込んでデータべースへ問い合わせ
-            #IDが存在しPASSがあっている場合マイページ?へ
-            #ない場合IDまたはPASSが違いますと表示ラベル？に表示
+            #IDとPASSを読み込んで�?ータべースへ問い合わ�?
+            #IDが存在しPASSがあって�?る�?�合�?�イペ�?�ジ?へ
+            #な�?場�?IDまた�?�PASSが違�?ますと表示ラベル?��に表示
     except:
-        #上記以外の場合
+        #上記以外�?�場�?
         Labeltext = ":ログインできません"
         return render_template("login.html",Labeltext=Labeltext)
     
@@ -72,7 +70,7 @@ def create_account_post():
             password = request.form["password"]
             sex = request.form["sex"]
             db.regist_user(create_account_id,password,create_account_name,sex)
-            infoMessage = "登録完了しました"
+            infoMessage = "登録完�?しました"
             flash(infoMessage,"complete")
             return render_template("login.html",infoMessage=infoMessage)
 @app.route("/", methods=["post"])
