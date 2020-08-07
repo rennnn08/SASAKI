@@ -1,6 +1,5 @@
 import  mysql.connector
 import sys
-import string
 sys.dont_write_bytecode = True
 
 class MySQL:
