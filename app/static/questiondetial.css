@@ -5,16 +5,16 @@
 
 form{
     /*中央寄せ*/
-    width: 80%;
+    width: 100%;
     margin: 0 auto;
-    max-width: 800px;
+    max-width: 1000px;
 }
 .Common_label{
     /*左詰め+上詰めとボーダー*/
     white-space:pre-wrap;
     text-align:left;
     vertical-align:top;
-    width:800px;
+    width:900px;
     border : solid 1px #333 ; 
     background-color:#fff;
 }
@@ -22,7 +22,15 @@ form{
 .detail_textarea {
     /*サイズ定義*/
     white-space: pre-wrap;
-    width:  800px;
+    width:  900px;
     height: 500px;
     resize:none;
+}
+
+.SpaceMargin{
+    margin-top: 20px;
+}
+
+.SpaceMargins{
+    margin-top: 50px;
 }
