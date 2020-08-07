@@ -597,7 +597,7 @@ class MySQL:
         try:
             cursor = self.dbh.cursor()
 
-            #
+            
             stmt = "DELETE FROM answer WHERE id = {}".format(answer_id)
             cursor.execute(stmt)
         
