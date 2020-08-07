@@ -359,9 +359,9 @@ class MySQL:
     """
     def regist_user(self, user_id, user_password, user_name, user_sex):
         try:
-            user_id = _SCharaReplace(user_id)
-            user_password = _SCharaReplace(user_password)
-            user_name = _SCharaReplace(User_name)
+            user_id = self._SCharaReplace(user_id)
+            user_password = self._SCharaReplace(user_password)
+            user_name = self._SCharaReplace(User_name)
 
             self._open()
             stmt = "INSERT INTO user(user_id, user_password, user_name, sex) \
@@ -411,7 +411,7 @@ class MySQL:
     """
     def set_user_name(self, user_id, user_name):
         try:
-            user_name = _SCharaReplace(user_name)
+            user_name = self._SCharaReplace(user_name)
 
             self._open()
             stmt = "UPDATE user SET user_name = '{}' \
@@ -438,7 +438,7 @@ class MySQL:
     """
     def set_user_profile(self, user_id, user_profile):
         try:
-            user_profile = _SCharaReplace(user_profile)
+            user_profile = self._SCharaReplace(user_profile)
 
             self._open()
             stmt = "UPDATE user SET profile = '{}' \
@@ -541,7 +541,7 @@ class MySQL:
     """
     def update_question_text(self, question_id, question_text):
         try:
-            question_text = _SCharaReplace(question_text)
+            question_text = self._SCharaReplace(question_text)
 
             self._open()
             stmt = "UPDATE question SET text = '{}' \
@@ -567,7 +567,7 @@ class MySQL:
     """
     def update_answer_text(self, answer_id, answer_text):
         try:
-            answer_text = _SCharaReplace(answer_text)
+            answer_text = self._SCharaReplace(answer_text)
 
             self._open()
             stmt = "UPDATE answer SET text = '{}' \
