@@ -61,7 +61,7 @@ def index():
         pagiantion = Pagination(page=page, total=len(all_questions), search=search, per_page=20, record_name='all_question', css_framework='bootstrap4')
         return render_template("index.html", all_question=all_question,pagination=pagiantion)
         
-        return redirect("/")
+    return redirect("/")
 
     
 
