@@ -25,19 +25,26 @@
                     <tr><th>カテゴリ</th></tr>           
                     <tr><th name="create_category_id" class="Common_label">{{create_category_id}}</th></tr>
                     <tr><th>本文</th></tr>
-                    <tr><th name="create_detail_id"  class = "Common_label" height="500">{{create_detail_id}}</th></tr>
+                    <tr><th name="create_detail_id"  class = "Common_label" height="500" >{{create_detail_id}}</th></tr>
                 </table>
+                <div class="SpaceMargin">
+                    <p> </p>
+                </div>
                 <input type="button" value="回答欄表示" onclick="clickBtn1()" class="btn btn-info">
-
+                <div class="SpaceMargin">
+                    <p> </p>
+                </div>
             </form>
             <div id="my_answer">
                 <form action="/question_detail/{{question_id}}" method="POST">
-                    <p><textarea name="answer_text" maxlength="3000" class = "detail_textarea" required></textarea></p>
+                    <p><textarea name="answer_text" maxlength="3000" class = "detail_textarea" width="800"wrap="hard"></textarea></p>
                     <input type="submit" value="回答の送信" class="Common_button btn btn-info">
                 </form>
             </div>
+            <div class="SpaceMargin"> 
+                <p> </p>
+            </div>
             <p>この質問への回答</p>
-    
             <form>
                 {% for kaitou in answers %}
                     <table>
@@ -45,7 +52,9 @@
                     </table>
                 {% endfor%}
             </form>
-
+            <div class="SpaceMardins">
+                <p></p>
+            </div>
             <script type="text/javascript">
                 //初期表示は非表示
                 document.getElementById("my_answer").style.display ="none";
