@@ -154,9 +154,7 @@ def create_question_post():
     create_title_id = request.form["create_title_id"]
     create_category_id = request.form["create_category_id"]
     create_detail_id = request.form["create_detail_id"]
-    if session.get("UserId")==None:
-        return redirect(url_for("login"))
-
+    
     user_id = session["UserId"]
     
     db.regist_question(create_title_id,create_category_id,create_detail_id,user_id)
