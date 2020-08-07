@@ -33,7 +33,7 @@
                 <tbody class="m-auto">
                     {% for question in all_question %}
                         <tr class="border-bottom ">
-                            <td><a href="{{url_for('answer_regist',question_id=question[0])}}">{{ question[5] }}</a></td>
+                            <td><a href="{{url_for('my_page',user_id=question[4])}}">{{ question[5] }}</a></td>
                             <td><a href="{{url_for('answer_regist',question_id=question[0])}}">{{question[2]}}</a></td>
                             <td><a href="{{url_for('answer_regist',question_id=question[0])}}">{{question[1]}}</a></td>
                             <td><a href="{{url_for('answer_regist',question_id=question[0])}}">{{question[3]}}</a></td>
