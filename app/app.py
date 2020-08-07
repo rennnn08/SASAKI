@@ -17,8 +17,8 @@ def login():
 
 @app.route("/",methods=["POST"])
 def login_post():
+    session["flag"] = False
     #ログインフラグによって返すページを返る処理
-       
     try:
         LoginId = request.form["LoginId"]
         LoginPass = request.form["LoginPass"]
@@ -72,8 +72,11 @@ def create_account_post():
             create_account_id = request.form["create_account_id"]
             password = request.form["password"]
             sex = request.form["sex"]
-            db.regist_user(create_account_id,password,create_account_name,sex)
-            infoMessage = "登録完了しました"
+            if  db.check_id_already_exists(create_account_id) == True:
+                infoMessage = "すでに登録されているidです。"
+            else:
+                db.regist_user(create_account_id,password,create_account_name,sex)
+                infoMessage = "登録完了しました"
             flash(infoMessage,"complete")
             return render_template("login.html",infoMessage=infoMessage)
 @app.route("/", methods=["post"])
@@ -150,12 +153,15 @@ def create_question():
 
 @app.route("/create_question",methods=["POST"])
 def create_question_post():
+    
     create_title_id = request.form["create_title_id"]
     create_category_id = request.form["create_category_id"]
     create_detail_id = request.form["create_detail_id"]
+    
     user_id = session["UserId"]
+    
     db.regist_question(create_title_id,create_category_id,create_detail_id,user_id)
-
+    
     return redirect(url_for("index"))
     
 @app.route("/my_page/<user_id>",methods=["POST","GET"])

@@ -18,8 +18,11 @@
                 </div>
             </form>
             
-
+            {% if session.get("UserId")==None %}
+            <a href="{{ url_for('login') }}" role="button" class="btn btn-info m-3">質問作成</a>
+            {% else %}
             <a href="{{ url_for('create_question') }}" role="button" class="btn btn-info m-3">質問作成</a>
+            {% endif %}
 
             {{ pagination.info}}
             <div class="d-flex justify-content-center m-2">{{ pagination.links}}</div>
