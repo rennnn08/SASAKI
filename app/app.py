@@ -45,7 +45,11 @@ def logout():
 
 @app.route("/home")
 def index():
-    if session["flag"]==True:
+    try:
+        flag = session["flag"]
+    except:
+        return redirect("/")
+    if flag==True:
         search = False
         q = request.args.get('q')
         if q:
@@ -57,7 +61,7 @@ def index():
         pagiantion = Pagination(page=page, total=len(all_questions), search=search, per_page=20, record_name='all_question', css_framework='bootstrap4')
         return render_template("index.html", all_question=all_question,pagination=pagiantion)
 
-    return redirect("/")
+    
 
 @app.route("/create_account")
 def create_account():
