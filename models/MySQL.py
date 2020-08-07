@@ -1,5 +1,6 @@
 import  mysql.connector
 import sys
+import string
 sys.dont_write_bytecode = True
 
 class MySQL:
@@ -19,6 +20,12 @@ class MySQL:
 
     def _close(self):
         self.dbh.close()
+
+    def _SCharaReplace(self, moji):
+        moji = moji.replace("\\","\\\\")
+        moji = moji.replace("\'","\\\'")
+        return moji
+
 
     """
     引　数：なし
@@ -182,6 +189,10 @@ class MySQL:
     """
     def regist_question(self, question_title, question_category, question_text, user_id):
         try:
+            question_title = self._SCharaReplace(question_title)
+            question_category = self._SCharaReplace(question_category)
+            question_text = self._SCharaReplace(question_text)
+
             self._open()
             cursor = self.dbh.cursor()
             stmt = "INSERT INTO question(title, category, text) VALUES('{}', '{}', '{}')".format(question_title, question_category, question_text)
@@ -214,6 +225,8 @@ class MySQL:
     """
     def regist_answer(self, question_id, answer_text, user_id):
         try:
+            answer_text = self._SCharaReplace(answer_text)
+
             self._open()
             cursor = self.dbh.cursor()
             stmt = "INSERT INTO answer(text, q_id) VALUES('{}', {})".format(answer_text, question_id)
@@ -349,6 +362,10 @@ class MySQL:
     """
     def regist_user(self, user_id, user_password, user_name, user_sex):
         try:
+            user_id = _SCharaReplace(user_id)
+            user_password = _SCharaReplace(user_password)
+            user_name = _SCharaReplace(User_name)
+
             self._open()
             stmt = "INSERT INTO user(user_id, user_password, user_name, sex) \
                 VALUES('{}', '{}', '{}', {})".format(user_id, user_password, user_name, user_sex)
@@ -397,6 +414,8 @@ class MySQL:
     """
     def set_user_name(self, user_id, user_name):
         try:
+            user_name = _SCharaReplace(user_name)
+
             self._open()
             stmt = "UPDATE user SET user_name = '{}' \
                 WHERE user_id = '{}'".format(user_name, user_id)
@@ -422,6 +441,8 @@ class MySQL:
     """
     def set_user_profile(self, user_id, user_profile):
         try:
+            user_profile = _SCharaReplace(user_profile)
+
             self._open()
             stmt = "UPDATE user SET profile = '{}' \
                 WHERE user_id = '{}'".format(user_profile, user_id)
@@ -523,6 +544,8 @@ class MySQL:
     """
     def update_question_text(self, question_id, question_text):
         try:
+            question_text = _SCharaReplace(question_text)
+
             self._open()
             stmt = "UPDATE question SET text = '{}' \
                 WHERE id = {}".format(question_text, question_id)
@@ -547,6 +570,8 @@ class MySQL:
     """
     def update_answer_text(self, answer_id, answer_text):
         try:
+            answer_text = _SCharaReplace(answer_text)
+
             self._open()
             stmt = "UPDATE answer SET text = '{}' \
                 WHERE id = {}".format(answer_text, answer_id)
