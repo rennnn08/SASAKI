@@ -361,7 +361,7 @@ class MySQL:
         try:
             user_id = self._SCharaReplace(user_id)
             user_password = self._SCharaReplace(user_password)
-            user_name = self._SCharaReplace(User_name)
+            user_name = self._SCharaReplace(user_name)
 
             self._open()
             stmt = "INSERT INTO user(user_id, user_password, user_name, sex) \
