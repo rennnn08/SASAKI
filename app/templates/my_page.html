@@ -14,8 +14,8 @@
     <div class="container">
         
         <div class="d-flex justify-content-center mt-5">
-            <form method="POST" action="/get_user_name">
-                <input type="text" name="user_name" value="{{user_name}}" readonly id="input" class="display_target">
+            <form method="POST" action="/get_user_name" name="search_form" id="search_form" onsubmit="return check()">
+                <input type="text" name="user_name" value="{{user_name}}" readonly id="input" class="display_target" maxlength="10">
                 {% if user_id==myid %}
                     <a href="#" role="button" class="btn btn-info ml-2 h-100 edit edit_on on" id="button">編集</a>
                     <input type="submit" class="btn btn-info ml-2 h-100 cancel edit_off off" id="button" value="保存">
@@ -25,14 +25,14 @@
 
         {% if user_id==myid %}
             <form action="{{ url_for('logout') }}"><br>
-                <br><input type="submit" class="Buttonin btn btn-info" name="Signout" value=SignOut style="float:right;"></form>
+                <br><input type="submit" class="Buttonin btn btn-info" name="Signout" value="ログアウト" style="float:right;"></form>
             </form>
         {% endif %}
                 
         <form method="POST" action="/get_user_profile">
             <div class="form-group mt-3">
                 <label for="exampleFormControlTextarea1">プロフィール</label>
-                <textarea class="form-control" name="user_prof" rows="3" readonly id="textarea" class="display_target2">{{user_prof}}</textarea>
+                <textarea class="form-control" name="user_prof" rows="3" readonly id="textarea" class="display_target2" maxlength="3000">{{user_prof}}</textarea>
             </div>
             {% if user_id==myid %}
                 <div class="text-right">
@@ -71,9 +71,21 @@
 </html>
 
 <script>
+    function check(){
+    var a=document.search_form.user_name.value;
+    if(a==""){
+        return false;
+    }else if(!a.match(/\S/g)){
+        return false;
+    }
+    }
+</script>
+
+<script>
     $(document).ready(function() {
     $('#button').click( function() {
         $('#input').prop("readonly", false);
+        $('#input').attr("required");
     } );
     } );
 </script>
@@ -91,20 +103,12 @@
         $(this).add($(this).find('.off')).hide();
     });
 
-    var target;
-    var val;
     $('.edit_on').click(function(){
-        target = $(this).find('input[type="text"]')
-        val = $(this).find('.display_target').text()
-        $(target).val(val)
         $(this).add($(this).find('.on')).hide()
         $('.off').show()
     });
 
     $('.edit_off').click(function(){
-        target = $(this).find('display_target')
-        val = $(this).find('input[type="text"]').val()
-        $(target).text(val)
         $(this).add($(this).find('.off')).hide()
         $('.on').show()
     });
@@ -131,20 +135,12 @@
         $(this).add($(this).find('.off')).hide();
     });
 
-    var target;
-    var val;
     $('.edit_on2').click(function(){
-        target = $(this).find('input[type="text"]')
-        val = $(this).find('.display_target').text()
-        $(target).val(val)
         $(this).add($(this).find('.on')).hide()
         $('.off2').show()
     });
 
     $('.edit_off2').click(function(){
-        target = $(this).find('display_target')
-        val = $(this).find('input[type="text"]').val()
-        $(target).text(val)
         $(this).add($(this).find('.off')).hide()
         $('.on2').show()
     });
