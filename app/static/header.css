@@ -1,5 +1,8 @@
 #logo {
-    font-size: 1.5em;
-    font-weight: bold;
+    font-size: 2em;
+    font-family: 'Lato', 'Noto Sans JP', 'ヒラギノ角ゴ ProN', 'Hiragino Kaku Gothic ProN', 'メイリオ', Meiryo, 'ＭＳ Ｐゴシック', 'MS PGothic', sans-serif;
 }
 
+nav {
+    font-size: 1.2em;
+}

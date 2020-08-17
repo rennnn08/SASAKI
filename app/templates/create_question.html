@@ -16,7 +16,9 @@
 
             <form action="/create_question" method="post">
                 <input type="submit" value="送信" name="send_question_button1"class="Common_button btn btn-info">
-                <p>タイトル</p>
+                <div class = title_size>
+                    <p>タイトル</p>
+                </div>
                 <p><input type="text" name="create_title_id" class="title_textbox" maxlength=30 required></p>
                 <p>カテゴリー</p>
                 <p><input type="text"id="category_textbox" name="create_category_id" class="category_textbox" maxlength=30  required></p>
