@@ -39,22 +39,31 @@ def login_post():
     
 @app.route('/logout')
 def logout():
-    session.pop('UserId', None)
-    session.pop("flag", None)
+    session["UserId"]=False
+    session["flag"]=False
     return redirect("/")
 
 @app.route("/home")
 def index():
-    search = False
-    q = request.args.get('q')
-    if q:
-        search = True
+    try:
+        flag = session["flag"]
+    except:
+        return redirect("/")
+    if flag==True:
+        search = False
+        q = request.args.get('q')
+        if q:
+            search = True
 
-    page = request.args.get(get_page_parameter(), type=int, default=1)
-    all_questions = db.extract_all_questions()
-    all_question = all_questions[(page - 1)*20: page*20]
-    pagiantion = Pagination(page=page, total=len(all_questions), search=search, per_page=20, record_name='all_question', css_framework='bootstrap4')
-    return render_template("index.html", all_question=all_question,pagination=pagiantion)
+        page = request.args.get(get_page_parameter(), type=int, default=1)
+        all_questions = db.extract_all_questions()
+        all_question = all_questions[(page - 1)*20: page*20]
+        pagiantion = Pagination(page=page, total=len(all_questions), search=search, per_page=20, record_name='all_question', css_framework='bootstrap4')
+        return render_template("index.html", all_question=all_question,pagination=pagiantion)
+        
+    return redirect("/")
+
+    
 
 @app.route("/create_account")
 def create_account():
@@ -161,10 +170,11 @@ def create_question_post():
     
     return redirect(url_for("index"))
     
-@app.route("/my_page")
-def my_page():
+@app.route("/my_page/<user_id>",methods=["POST","GET"])
+def my_page(user_id):
 
-    user_id = session["UserId"]
+    myid=session["UserId"]
+
     user_info = db.get_user_info(user_id)
     user_name = user_info[0][0]
     user_prof = user_info[0][2]
@@ -179,7 +189,9 @@ def my_page():
     all_question = all_questions[(page - 1)*20: page*20]
     pagiantion = Pagination(page=page, total=len(all_questions), search=search, per_page=20, record_name='all_question', css_framework='bootstrap4')
 
-    return render_template("my_page.html",pagination=pagiantion,all_question=all_question,user_name=user_name, user_prof = user_prof)
+    return render_template("my_page.html",pagination=pagiantion,all_question=all_question,user_name=user_name, user_prof = user_prof,user_id=user_id,myid=myid)
+
+
 
 @app.route("/get_user_name", methods=["POST"])
 def get_user_info():

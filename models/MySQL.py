@@ -1,6 +1,4 @@
 import  mysql.connector
-import sys
-sys.dont_write_bytecode = True
 
 class MySQL:
     def __init__(self):
@@ -19,6 +17,12 @@ class MySQL:
 
     def _close(self):
         self.dbh.close()
+
+    def _SCharaReplace(self, moji):
+        moji = moji.replace("\\","\\\\")
+        moji = moji.replace("\'","\\\'")
+        return moji
+
 
     """
     引　数：なし
@@ -182,6 +186,10 @@ class MySQL:
     """
     def regist_question(self, question_title, question_category, question_text, user_id):
         try:
+            question_title = self._SCharaReplace(question_title)
+            question_category = self._SCharaReplace(question_category)
+            question_text = self._SCharaReplace(question_text)
+
             self._open()
             cursor = self.dbh.cursor()
             stmt = "INSERT INTO question(title, category, text) VALUES('{}', '{}', '{}')".format(question_title, question_category, question_text)
@@ -214,6 +222,8 @@ class MySQL:
     """
     def regist_answer(self, question_id, answer_text, user_id):
         try:
+            answer_text = self._SCharaReplace(answer_text)
+
             self._open()
             cursor = self.dbh.cursor()
             stmt = "INSERT INTO answer(text, q_id) VALUES('{}', {})".format(answer_text, question_id)
@@ -349,6 +359,10 @@ class MySQL:
     """
     def regist_user(self, user_id, user_password, user_name, user_sex):
         try:
+            user_id = self._SCharaReplace(user_id)
+            user_password = self._SCharaReplace(user_password)
+            user_name = self._SCharaReplace(user_name)
+
             self._open()
             stmt = "INSERT INTO user(user_id, user_password, user_name, sex) \
                 VALUES('{}', '{}', '{}', {})".format(user_id, user_password, user_name, user_sex)
@@ -397,6 +411,8 @@ class MySQL:
     """
     def set_user_name(self, user_id, user_name):
         try:
+            user_name = self._SCharaReplace(user_name)
+
             self._open()
             stmt = "UPDATE user SET user_name = '{}' \
                 WHERE user_id = '{}'".format(user_name, user_id)
@@ -422,6 +438,8 @@ class MySQL:
     """
     def set_user_profile(self, user_id, user_profile):
         try:
+            user_profile = self._SCharaReplace(user_profile)
+
             self._open()
             stmt = "UPDATE user SET profile = '{}' \
                 WHERE user_id = '{}'".format(user_profile, user_id)
@@ -523,6 +541,8 @@ class MySQL:
     """
     def update_question_text(self, question_id, question_text):
         try:
+            question_text = self._SCharaReplace(question_text)
+
             self._open()
             stmt = "UPDATE question SET text = '{}' \
                 WHERE id = {}".format(question_text, question_id)
@@ -547,6 +567,8 @@ class MySQL:
     """
     def update_answer_text(self, answer_id, answer_text):
         try:
+            answer_text = self._SCharaReplace(answer_text)
+
             self._open()
             stmt = "UPDATE answer SET text = '{}' \
                 WHERE id = {}".format(answer_text, answer_id)
@@ -569,13 +591,14 @@ class MySQL:
     戻り値：削除が成功かどうか（boolean型）
     機　能：指定したIDの回答を削除する
 
-    def delete_question(self, question_id):
+    def delete_answer(self, answer_id):
         self._open()
         
         try:
-            #回答の削除
             cursor = self.dbh.cursor()
-            stmt = "DELETE FROM answer WHERE id = {}".format(question_id)
+
+            
+            stmt = "DELETE FROM answer WHERE id = {}".format(answer_id)
             cursor.execute(stmt)
         
         except mysql.connector.Error as err:
