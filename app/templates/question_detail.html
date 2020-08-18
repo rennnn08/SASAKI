@@ -19,13 +19,13 @@
 
             <form>
                 <!--質問の概要-->
-                <table>
+                <table class="questiontable">
                     <tr><th>タイトル</th></tr>
-                    <tr><th name="create_title_id" class="Common_label" height="1em">{{create_title_id}}</th></tr>
+                    <tr><th name="create_title_id" class="Common_label" height="1em" width="800">{{create_title_id}}</th></tr>
                     <tr><th>カテゴリ</th></tr>           
-                    <tr><th name="create_category_id" class="Common_label">{{create_category_id}}</th></tr>
+                    <tr><th name="create_category_id" class="Common_label" width="800">{{create_category_id}}</th></tr>
                     <tr><th>本文</th></tr>
-                    <tr><th name="create_detail_id"  class = "Common_label" height="500" >{{create_detail_id}}</th></tr>
+                    <tr><th name="create_detail_id"  class = "Common_label" height="500" width="800">{{create_detail_id}}</th></tr>
                 </table>
                 <div class="SpaceMargin">
                     <p> </p>
@@ -37,19 +37,23 @@
             </form>
             <div id="my_answer">
                 <form action="/question_detail/{{question_id}}" method="POST">
-                    <p><textarea name="answer_text" maxlength="3000" class = "detail_textarea" width="800"wrap="hard"></textarea></p>
+                    <p><textarea name="answer_text" maxlength="3000" class = "detail_textarea" wrap="soft" required></textarea></p>
                     <input type="submit" value="回答の送信" class="Common_button btn btn-info">
                 </form>
             </div>
             <div class="SpaceMargin"> 
                 <p> </p>
             </div>
-            <p>この質問への回答</p>
+            
             <form>
+                <p>この質問への回答</p>
                 {% for kaitou in answers %}
-                    <table>
-                        <tr><th class="Common_label" >{{kaitou}}</th></tr>
+                    <table class="answertable">
+                        <tr><th>{{kaitou}}</div></th></tr>
                     </table>
+                    <div class="SpaceMardins">
+                        <p></p>
+                    </div>
                 {% endfor%}
             </form>
             <div class="SpaceMardins">
