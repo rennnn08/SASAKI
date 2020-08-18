@@ -9,6 +9,13 @@ form{
     margin: 0 auto;
     max-width: 1000px;
 }
+
+
+.title_size{
+    font-size: 1.5em;
+    font-size: 150%;
+}
+
 .Common_label{
     /*左詰め+上詰めとボーダー*/
     white-space:pre-wrap;
