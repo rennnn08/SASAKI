@@ -85,16 +85,24 @@
     $(document).ready(function() {
     $('#button').click( function() {
         $('#input').prop("readonly", false);
-        $('#input').attr("required");
     } );
     } );
 </script>
 
 <script>
     $(document).ready(function() {
-    $('.edit_off').click( function() {
-        $('#input').prop("readonly", true);
-    } );
+        $('.edit_off').click( function() {
+        var a=document.search_form.user_name.value;
+        if(a==""){
+        return false;
+        }else if(!a.match(/\S/g)){
+            return false;
+        }
+        else{
+            $('#input').prop("readonly", true);
+        }
+        }
+        );
     } );
 </script>
 
@@ -109,8 +117,16 @@
     });
 
     $('.edit_off').click(function(){
+        var a=document.search_form.user_name.value;
+        if(a==""){
+        return false;
+        }else if(!a.match(/\S/g)){
+            return false;
+        }
+        else{
         $(this).add($(this).find('.off')).hide()
         $('.on').show()
+        }
     });
 </script>
 
