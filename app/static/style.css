@@ -9,7 +9,10 @@ body {
     text-align: center;
 }
 
-
+.title_size{
+    font-size: 1.5em;
+    font-size: 150%;
+}
 .pagination-page-info {
     padding: .6em;
     text-align: center;
