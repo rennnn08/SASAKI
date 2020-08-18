@@ -18,10 +18,10 @@
       <form action="/create_account" method="POST">
         <div class = "d-flex justify-content-center">
           <div id="errorMessage">
-            <label for="create_account_name" class="mt-5">お名前:</label>
-            <input type= "text" maxlength="10" name="create_account_name"  class="name_textbox form-control"  required><br>
+            <label for="create_account_name" class="mt-5 title_size">名前:</label>
+            <input type= "text" maxlength="10" name="create_account_name"  class="form-control"  required><br>
             <div class = "form-group">
-              <label for="sex">性別:</label><br>
+              <label for="sex" class="title_size">性別:</label><br>
               <div class="form-check form-check-inline">
                 <input class="form-check-input" type="radio" name="sex"  value="0" checked>
                 <label class="form-check-label" for="sex">秘匿</label>
@@ -39,15 +39,15 @@
                 <label class="form-check-label" for="sex">その他</label>
               </div>
             </div>
-            <label for="create_account_id">id:</label>
-            <input type="text"  name="create_account_id" class="id_text name_textbox form-control" maxlength = 20 required>
+            <label for="create_account_id" class ="title_size">ID:</label>
+            <input type="text"  name="create_account_id" class="form-control" maxlength = 20 required>
 
             <div class="form-group">
-              <label>パスワード</label>
+              <label class="title_size">PassWord:</label>
               <input type="password" class="form-control" name="password" id="password"style="ime-mode:disabled;" maxlength = 100 required>
             </div>
             <div class="form-group">
-              <label>パスワード (再確認)</label>
+              <label  class="title_size">PassWord(確認用):</label>
               <input type="password" class="form-control" name="confirm" oninput="CheckPassword(this)" style="ime-mode:disabled;" maxlength = 100 required>
             </div>
             <input type="submit" value="送信" name="send_question_button2"class="Common_button btn btn-primary">

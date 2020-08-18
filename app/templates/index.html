@@ -2,7 +2,7 @@
 <html lang="ja">
     <head>
         <meta charset="UTF-8">
-        <title>質問投稿サイト</title>
+        <title>ホームページ</title>
         <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.0/css/bootstrap.min.css" integrity="sha384-9aIt2nRpC12Uk9gS9baDl411NQApFmC26EwAOH8WgZl5MYYxFfc+NcPb1dKGj7Sk" crossorigin="anonymous">
         <link rel="stylesheet" type="text/css" href="{{ staticfile('style.css') }}">
         <link rel="stylesheet" type="text/css" href="{{ staticfile('header.css') }}">
@@ -28,17 +28,17 @@
             <div class="d-flex justify-content-center m-2">{{ pagination.links}}</div>
             <table class="m-auto p-5 w-75">
                 <thread class="m-auto p-5">
-                    <th>UserName</th>
-                    <th>Catagory</th>
-                    <th>Title</th>
-                    <th>Date</th>
+                    <th class="title_size">名前</th>
+                    <th class="title_size">タイトル</th>
+                    <th class="title_size">カテゴリ</th>
+                    <th class="title_size">日時</th>
                 </thread>
                 <tbody class="m-auto">
                     {% for question in all_question %}
                         <tr class="border-bottom ">
                             <td><a href="{{url_for('my_page',user_id=question[4])}}">{{ question[5] }}</a></td>
-                            <td><a href="{{url_for('answer_regist',question_id=question[0])}}">{{question[2]}}</a></td>
                             <td><a href="{{url_for('answer_regist',question_id=question[0])}}">{{question[1]}}</a></td>
+                            <td><a href="{{url_for('answer_regist',question_id=question[0])}}">{{question[2]}}</a></td>
                             <td><a href="{{url_for('answer_regist',question_id=question[0])}}">{{question[3]}}</a></td>
                         </tr>
                     {% endfor %}

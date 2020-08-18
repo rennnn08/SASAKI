@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>質問投稿サイト</title>
+    <title>マイページ</title>
     <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.0/css/bootstrap.min.css" integrity="sha384-9aIt2nRpC12Uk9gS9baDl411NQApFmC26EwAOH8WgZl5MYYxFfc+NcPb1dKGj7Sk" crossorigin="anonymous">
     <link rel="stylesheet" type="text/css" href="{{ staticfile('style.css') }}">
     <link rel="stylesheet" type="text/css" href="{{ staticfile('header.css') }}">
@@ -15,6 +15,7 @@
         
         <div class="d-flex justify-content-center mt-5">
             <form method="POST" action="/get_user_name" name="search_form" id="search_form" onsubmit="return check()">
+                <!--<label for="exampleFormControlTextarea1" class="title_size">名前</label>-->
                 <input type="text" name="user_name" value="{{user_name}}" readonly id="input" class="display_target" maxlength="10">
                 {% if user_id==myid %}
                     <a href="#" role="button" class="btn btn-info ml-2 h-100 edit edit_on on" id="button">編集</a>
@@ -22,16 +23,10 @@
                 {% endif %}
             </form>
         </div>
-
-        {% if user_id==myid %}
-            <form action="{{ url_for('logout') }}"><br>
-                <br><input type="submit" class="Buttonin btn btn-info" name="Signout" value="ログアウト" style="float:right;"></form>
-            </form>
-        {% endif %}
                 
         <form method="POST" action="/get_user_profile">
             <div class="form-group mt-3">
-                <label for="exampleFormControlTextarea1">プロフィール</label>
+                <label for="exampleFormControlTextarea1" class="title_size">プロフィール</label>
                 <textarea class="form-control" name="user_prof" rows="3" readonly id="textarea" class="display_target2" maxlength="3000">{{user_prof}}</textarea>
             </div>
             {% if user_id==myid %}
@@ -49,17 +44,17 @@
         <div class="d-flex justify-content-center m-2">{{ pagination.links}}</div>
             <table class="m-auto p-5 w-75">
                 <thread class="m-auto p-5">
-                    <th>#</th>
-                    <th>Catagory</th>
-                    <th>Title</th>
-                    <th>Date</th>
+                    <th class="title_size">#</th>
+                    <th class="title_size">タイトル</th>
+                    <th class="title_size">カテゴリ</th>
+                    <th class="title_size">日時</th>
                 </thread>
                 <tbody class="m-auto">
                     {% for question in all_question %}
                         <tr class="border-bottom">
                             <td><a href="{{url_for('answer_regist',question_id=question[0])}}">{{ loop.index + pagination.skip }}</a></td>
-                            <td>{{question[2]}}</td>
                             <td>{{question[1]}}</td>
+                            <td>{{question[2]}}</td>
                             <td>{{question[3]}}</td>
                         </tr>
                     {% endfor %}
