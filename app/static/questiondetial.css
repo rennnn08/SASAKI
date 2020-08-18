@@ -7,7 +7,7 @@ form{
     /*中央寄せ*/
     width: 100%;
     margin: 0 auto;
-    max-width: 1000px;
+    max-width: 800px;
 }
 
 
@@ -21,7 +21,7 @@ form{
     white-space:pre-wrap;
     text-align:left;
     vertical-align:top;
-    width:900px;
+    width:800px;
     border : solid 1px #333 ; 
     background-color:#fff;
 }
@@ -29,7 +29,7 @@ form{
 .detail_textarea {
     /*サイズ定義*/
     white-space: pre-wrap;
-    width:  900px;
+    width:  800px;
     height: 500px;
     resize:none;
 }
@@ -40,4 +40,18 @@ form{
 
 .SpaceMargins{
     margin-top: 50px;
+}
+
+.questiontable{
+    table-layout: fixed;
+    width: 800px;
+    word-wrap: break-word;
+}
+
+.answertable{
+    white-space:pre-wrap;
+    border : solid 1px #333 ;
+    table-layout: fixed;
+    width: 800px;
+    word-wrap: break-word;
 }
