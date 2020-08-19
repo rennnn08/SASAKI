@@ -86,6 +86,7 @@ print(db.regist_question('こんにちは天ぷらそばの天ぷら...','料理
 print(db.regist_question('コカ・コーラとコカ・コーラゼロに味の差は有りますか？','料理','コカ・コーラとコカ・コーラゼロに味の差は有りますか？','Sergio Carlo Di Benedetto'))
 print(db.regist_question('納豆が食べれない人いますか？','料理','納豆が食べれない人いますか？','uS5qzaC2'))
 print(db.regist_question('料理を作ると作りすぎてしまう人いますか？','料理','料理を作ると作りすぎてしまう人いますか？','Sergio Carlo Di Benedetto'))
+print(db.regist_question('ひやむぎっておいしいと思いますか？','料理','ひやむぎっておいしいと思いますか？','Sergio Carlo Di Benedetto'))
 
 
 
